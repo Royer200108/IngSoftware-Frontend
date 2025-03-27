@@ -1,0 +1,113 @@
+import { ChangeEvent, useState, useEffect } from "react";
+
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
+function Login() {
+  const [formData, setFormData] = useState<{
+    correo: string;
+    password: string;
+  }>({
+    correo: "",
+    password: "",
+  });
+
+  /*
+  //Esta funcion valida que el usuario este Logueado (nos retorna una promesa)
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) {
+        navigate("/home");
+      }
+    });
+  }, [navigate]);
+  */
+
+  function handleChange(
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) {
+    setFormData({
+      ...formData,
+      [event.target.name]: event.target.value,
+    });
+    console.log("FORMATEADO: ", formData);
+  }
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:3000/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error);
+    } catch (error) {
+      console.error("Error de autenticación:", error);
+    }
+    /*
+    e.preventDefault();
+    console.log(formData);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+      */
+  }
+
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Header />
+      <main className="flex-grow p-4 content-center items-center w-3/5 mx-auto">
+        <div className="rounded-sm h-1 bg-gray-400"></div>
+        <div className="h-70 flex flex-col items-center sm:max-lg:mb-5">
+          <p className="text-3xl pt-5">Ingresa tu correo y contraseña</p>
+          <form
+            className="w-4/5 h-40 pt-10 flex flex-col items-center gap-y-3"
+            onSubmit={handleSubmit}
+          >
+            <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2 bg-white">
+              <label className="w-1/3">Correo Electrónico:</label>
+              <input
+                name="correo"
+                type="email"
+                placeholder="Email"
+                className="bg-gray-200 rounded-sm border-gray-300 border-2"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2">
+              <label className="w-1/3">Contraseña:</label>
+              <input
+                name="password"
+                type="password"
+                placeholder="Password"
+                className="bg-gray-200 rounded-sm border-gray-300 border-2"
+                onChange={handleChange}
+              />
+            </div>
+            <div className="lg:w-4/5 w-2/3 lg:flex justify-end pl-2 pr-2 hover:text-blue-700 cursor-pointer">
+              <p>¿No tienes un usuario?</p>
+            </div>
+
+            <button className="rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white">
+              Iniciar Sesión
+            </button>
+          </form>
+        </div>
+        <div className="rounded-sm h-1 bg-gray-400"></div>
+      </main>
+      <Footer />
+    </div>
+  );
+}
+
+export default Login;
