@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 function Login() {
+  //Almacena los valores escritos en los inputs del formulario
   const [formData, setFormData] = useState<{
     correo: string;
     password: string;
@@ -23,6 +24,7 @@ function Login() {
   }, [navigate]);
   */
 
+  //Actualzia en tiempo real todo lo que se escribe dentro de la consola
   function handleChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
@@ -35,8 +37,10 @@ function Login() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    console.log("Adios");
 
     try {
+      console.log("Hola");
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -44,8 +48,12 @@ function Login() {
       });
 
       const result = await response.json();
+      console.log(response);
       if (!response.ok) throw new Error(result.error);
+
+      console.log(response);
     } catch (error) {
+      console.log("Hola");
       console.error("Error de autenticación:", error);
     }
     /*
