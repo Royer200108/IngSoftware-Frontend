@@ -5,18 +5,24 @@ import { useNavigate } from "react-router-dom";
 
 import Arrow from "../assets/blue_arrow.png";
 
-interface Props {
-  token: object;
-}
-
 //function HomePage({ token }: Props) {
-function HomePage({ token }: Props) {
+function HomePage() {
   const navigate = useNavigate();
   const pages: string[] = ["/authclient", "/authvisitor"];
 
+  async function cerrarSesion() {
+    const response = await fetch("http://localhost:3000/auth/logout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    });
+
+    const data = await response.json();
+    console.log(data.message);
+  }
+
   function handleLogout() {
-    sessionStorage.removeItem("token");
-    navigate("/");
+    cerrarSesion();
+    navigate("/login");
   }
 
   function handleChange(index: number) {
@@ -26,7 +32,7 @@ function HomePage({ token }: Props) {
   return (
     <>
       <div>HomePage</div>
-      <div>{token.user.email}</div>
+
       <div className="flex flex-col min-h-screen">
         <Header />
 

@@ -1,9 +1,11 @@
-import { ChangeEvent, useState, useEffect } from "react";
+import { ChangeEvent, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 function Login() {
+  const navigate = useNavigate();
   //Almacena los valores escritos en los inputs del formulario
   const [formData, setFormData] = useState<{
     correo: string;
@@ -13,18 +15,7 @@ function Login() {
     password: "",
   });
 
-  /*
-  //Esta funcion valida que el usuario este Logueado (nos retorna una promesa)
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (user) {
-        navigate("/home");
-      }
-    });
-  }, [navigate]);
-  */
-
-  //Actualzia en tiempo real todo lo que se escribe dentro de la consola
+  //Actualiza en tiempo real todo lo que se escribe dentro de la consola
   function handleChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
@@ -48,27 +39,16 @@ function Login() {
       });
 
       const result = await response.json();
-      console.log(response);
+
       if (!response.ok) throw new Error(result.error);
 
-      console.log(response);
+      navigate("/");
+
+      //console.log(response);
     } catch (error) {
       console.log("Hola");
       console.error("Error de autenticación:", error);
     }
-    /*
-    e.preventDefault();
-    console.log(formData);
-
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
-      });
-    } catch (error) {
-      console.log(error);
-    }
-      */
   }
 
   return (
