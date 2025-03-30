@@ -5,6 +5,7 @@ import CameraCapture from "../components/CameraCapture";
 //import supabase from "../client";
 
 import { useState, ChangeEvent } from "react";
+import FaceDescriptorExtractor from "../components/FaceDescriptorExtractor";
 //import { useNavigate } from "react-router-dom";
 
 function RegisterVisitor() {
@@ -14,7 +15,7 @@ function RegisterVisitor() {
     foto: "",
     correo: "",
     dni: "",
-    //descriptor_facial: "",
+    descriptor_facial: "",
   });
   const [correoError, setcorreoError] = useState("");
   const [capturedPhoto, setCapturedPhoto] = useState<{
@@ -106,7 +107,6 @@ function RegisterVisitor() {
     e.preventDefault();
 
     try {
-      // Convertir base64 a Blob
       const base64ToBlob = async (base64: string) => {
         const response = await fetch(base64);
         return await response.blob();
@@ -114,32 +114,29 @@ function RegisterVisitor() {
 
       const formDataImage = new FormData();
 
-      // Agregar la imagen si existe
       if (capturedPhoto) {
         const blob = await base64ToBlob(capturedPhoto.data);
         formDataImage.append("file", blob, capturedPhoto.fileName);
       }
 
       // Agregar los demás datos del formulario
-      Object.entries(formDataImage).forEach(([key, value]) => {
+      Object.entries(formData).forEach(([key, value]) => {
         if (key !== "foto") {
-          // Ya lo incluimos en el fileName
           formDataImage.append(key, value);
         }
       });
 
       const photoResponse = await fetch("http://localhost:3000/image/upload", {
         method: "POST",
-        body: formDataImage, // El navegador establece los headers
+        body: formDataImage,
       });
 
       const finalPhotoResponse = await photoResponse.json();
       console.log("URL de la imagen:", finalPhotoResponse.imageUrl);
-      console.log("Respuesta completa:", finalPhotoResponse);
-      //const { state, imageURL } = photoResponse.json();
 
       formData.foto = finalPhotoResponse.imageUrl;
 
+      console.log(formData);
       const formResponse = await fetch(
         "http://localhost:3000/persona/registrar",
         {
@@ -154,7 +151,6 @@ function RegisterVisitor() {
       }
 
       console.log("Usuario registrado exitosamente");
-      //navigate("/", { replace: true });
     } catch (error) {
       console.error("Error de autenticación:", error);
     }
@@ -219,25 +215,32 @@ function RegisterVisitor() {
               <p className="text-red-500 text-sm">{correoError}</p>
             )}
             <CameraCapture onCapture={handlePhotoCapture} />
-            {/* Muestra la foto recibida (opcional) */}
-            {/*capturedPhoto && (
-              <div style={{ marginTop: "30px" }}>
-                <h2>Vista Previa en el Padre:</h2>
-                <img
-                  src={capturedPhoto}
-                  alt="Desde el padre"
-                  style={{
-                    width: "350px",
-                    border: "2px solid #ddd",
-                    borderRadius: "4px",
-                  }}
-                />
-              </div>
-            )*/}
+
+            {capturedPhoto && (
+              <FaceDescriptorExtractor
+                photoData={capturedPhoto.data}
+                onDescriptorReady={(descriptor) => {
+                  if (descriptor) {
+                    setFormData((prev) => ({
+                      ...prev,
+                      descriptor_facial: JSON.stringify(descriptor),
+                    }));
+                  }
+                }}
+              />
+            )}
 
             <button
-              className="rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white"
-              disabled={!!correoError}
+              className={
+                formData.descriptor_facial &&
+                formData.nombres &&
+                formData.apellidos &&
+                formData.correo &&
+                formData.dni
+                  ? `rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white `
+                  : `rounded-sm bg-gray-400 p-1 pl-5 pr-5  text-white`
+              }
+              disabled={!!correoError || !formData.descriptor_facial}
             >
               Crear usuario
             </button>
