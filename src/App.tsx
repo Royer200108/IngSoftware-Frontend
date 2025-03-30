@@ -1,14 +1,18 @@
 import "./App.css";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 
 import Login from "./pages/Login";
 import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
+import AuthVisitor from "./pages/AuthVisitor";
+import AuthEmployeeEstudent from "./pages/AuthEmployeeEstudent";
+import RegisterVisitor from "./pages/RegisterVisitor";
 
 function App() {
   const navigate = useNavigate();
+  const [user, setUser] = useState({});
 
   async function verSesion() {
     const response = await fetch("http://localhost:3000/auth/verificarLogin", {
@@ -23,16 +27,15 @@ function App() {
 
     const data = await response.json();
     console.log("Estado de autenticación:", data);
-
+    setUser(data.user);
     if (!data.isAuthenticated) {
       navigate("/login"); // Redirigir si no hay sesión activa
-    } else {
-      navigate("/");
     }
   }
 
   useEffect(() => {
     verSesion();
+    console.log("El valor del usuario es: ", user);
   }, []);
 
   return (
@@ -41,6 +44,9 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/authvisitor" element={<AuthVisitor />} />
+        <Route path="/authclient" element={<AuthEmployeeEstudent />} />
+        <Route path="/registervisitor" element={<RegisterVisitor />} />
       </Routes>
     </>
   );

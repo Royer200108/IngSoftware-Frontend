@@ -11,7 +11,7 @@ function AuthEmployeeEstudent() {
 
   function handleLogout() {
     //sessionStorage.removeItem("token");
-    navigate("/homepage");
+    navigate("/");
   }
 
   return (
