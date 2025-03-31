@@ -1,13 +1,33 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import FaceRecognition from "../components/FaceRecognition";
 
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import Arrow from "../assets/blue_arrow.png";
 
 //function HomePage({ token }: Props) {
-function AuthVisitor() {
+function IdentifyVisitor() {
   const navigate = useNavigate();
+  const [identifiedUser, setIdentifiedUser] = useState<{
+    dni: string;
+    nombres: string;
+    apellidos: string;
+    descriptor_facial: number[];
+    fotografia: string;
+  } | null>(null);
+
+  const handleUserIdentified = (user: {
+    dni: string;
+    nombres: string;
+    apellidos: string;
+    descriptor_facial: number[];
+    fotografia: string;
+  }) => {
+    setIdentifiedUser(user);
+    console.log("Usuario identificado:", user);
+  };
 
   function handleRoute(url: string) {
     //sessionStorage.removeItem("token");
@@ -25,34 +45,25 @@ function AuthVisitor() {
           <div className="h-60 flex flex-col gap-y-7 items-center sm:max-lg:mb-5 pt-10 text-#003b74">
             <div
               className="flex flex-row items-center gap-x-10 w-3/3 pt-5 cursor-pointer "
-              onClick={() => handleRoute("/")}
+              onClick={() => handleRoute("/authvisitor")}
             >
               <img src={Arrow} alt="" className="rotate-180" />
               <div className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md">
                 Atrás
               </div>
             </div>
-            <div className="flex flex-col gap-y-7 pl-5">
-              <div
-                className="flex flex-row items-center gap-x-10 cursor-pointer"
-                onClick={() => handleRoute("/identifyvisitor")}
-              >
-                <img src={Arrow} alt="" />
-                <div className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md">
-                  Identificar visitante
-                </div>
-              </div>
-              <div className="flex flex-row items-center gap-x-10 cursor-pointer">
-                <img src={Arrow} alt="" />
-                <div
-                  className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md"
-                  onClick={() => handleRoute("/registervisitor")}
-                >
-                  Registrar visitante
-                </div>
-              </div>
-            </div>
           </div>
+
+          <FaceRecognition onUserIdentified={handleUserIdentified} />
+          {identifiedUser ? (
+            <p>
+              Usuario autenticado: {identifiedUser.nombres} (ID:{" "}
+              {identifiedUser.dni})
+            </p>
+          ) : (
+            <p>Esperando identificación...</p>
+          )}
+
           <div className="rounded-sm h-1 bg-gray-400"></div>
         </main>
         <Footer />
@@ -61,4 +72,4 @@ function AuthVisitor() {
   );
 }
 
-export default AuthVisitor;
+export default IdentifyVisitor;

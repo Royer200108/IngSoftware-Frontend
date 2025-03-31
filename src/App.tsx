@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import AuthVisitor from "./pages/AuthVisitor";
 import AuthEmployeeEstudent from "./pages/AuthEmployeeEstudent";
 import RegisterVisitor from "./pages/RegisterVisitor";
+import IdentifyVisitor from "./pages/IdentifyVisitor";
 
 function App() {
   const navigate = useNavigate();
@@ -47,6 +48,7 @@ function App() {
         <Route path="/authvisitor" element={<AuthVisitor />} />
         <Route path="/authclient" element={<AuthEmployeeEstudent />} />
         <Route path="/registervisitor" element={<RegisterVisitor />} />
+        <Route path="/identifyvisitor" element={<IdentifyVisitor />} />
       </Routes>
     </>
   );

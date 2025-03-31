@@ -5,10 +5,14 @@ import CameraCapture from "../components/CameraCapture";
 //import supabase from "../client";
 
 import { useState, ChangeEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import FaceDescriptorExtractor from "../components/FaceDescriptorExtractor";
 //import { useNavigate } from "react-router-dom";
 
+import Arrow from "../assets/blue_arrow.png";
+
 function RegisterVisitor() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     nombres: "",
     apellidos: "",
@@ -156,13 +160,28 @@ function RegisterVisitor() {
     }
   }
 
+  function handleRoute(url: string) {
+    //sessionStorage.removeItem("token");
+    navigate(url);
+  }
+
   return (
     <div className="flex flex-col">
       <Header />
-      <main className="flex-grow p-4 content-center justify-center items-center w-3/5 mx-auto h-220">
+      <main className="flex-grow p-4 content-center justify-center items-center w-3/5 mx-auto h-225">
         <p className="pb-3 text-2xl">Registrar visitante</p>
         <div className="rounded-sm h-1 bg-gray-400"></div>
-        <div className="bg-blue-600 h-200 flex flex-col items-center sm:max-lg:mb-5">
+        <div className=" h-200 flex flex-col items-center sm:max-lg:mb-5">
+          {/*El boton de salir */}
+          <div
+            className="flex flex-row items-center gap-x-10 w-3/3 pt-5 cursor-pointer "
+            onClick={() => handleRoute("/authvisitor")}
+          >
+            <img src={Arrow} alt="" className="rotate-180" />
+            <div className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md">
+              Atrás
+            </div>
+          </div>
           <form
             className="w-4/5 h-40 pt-10 flex flex-col items-center gap-y-3"
             onSubmit={handleSubmit}
