@@ -19,7 +19,7 @@ function RegisterVisitor() {
     foto: "",
     correo: "",
     dni: "",
-    descriptor_facial: "",
+    descriptor_facial: [] as number[],
   });
   const [correoError, setcorreoError] = useState("");
   const [capturedPhoto, setCapturedPhoto] = useState<{
@@ -126,7 +126,10 @@ function RegisterVisitor() {
       // Agregar los demás datos del formulario
       Object.entries(formData).forEach(([key, value]) => {
         if (key !== "foto") {
-          formDataImage.append(key, value);
+          formDataImage.append(
+            key,
+            typeof value === "object" ? JSON.stringify(value) : value
+          );
         }
       });
 
@@ -155,6 +158,7 @@ function RegisterVisitor() {
       }
 
       console.log("Usuario registrado exitosamente");
+      navigate("/identifyvisitor");
     } catch (error) {
       console.error("Error de autenticación:", error);
     }
@@ -242,7 +246,7 @@ function RegisterVisitor() {
                   if (descriptor) {
                     setFormData((prev) => ({
                       ...prev,
-                      descriptor_facial: JSON.stringify(descriptor),
+                      descriptor_facial: descriptor,
                     }));
                   }
                 }}
@@ -251,10 +255,9 @@ function RegisterVisitor() {
 
             <button
               className={
-                formData.descriptor_facial &&
+                formData.descriptor_facial.length !== 0 &&
                 formData.nombres &&
                 formData.apellidos &&
-                formData.correo &&
                 formData.dni
                   ? `rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white `
                   : `rounded-sm bg-gray-400 p-1 pl-5 pr-5  text-white`
