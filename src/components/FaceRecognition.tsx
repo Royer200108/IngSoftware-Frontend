@@ -148,15 +148,13 @@ const FaceRecognition: React.FC<FaceRecognitionSystemProps> = ({
   }, [loading, users, currentUser, shouldDetect, onUserIdentified]);
 
   return (
-    <div>
-      <h2>Reconocimiento Facial</h2>
+    <div className="flex flex-col items-center gap-y-5">
       <video
         ref={videoRef}
-        width="640"
-        height="480"
         autoPlay
         muted
         playsInline
+        className="rounded-2xl w-3/5"
       />
       <canvas
         ref={canvasRef}

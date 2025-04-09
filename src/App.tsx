@@ -10,6 +10,7 @@ import AuthVisitor from "./pages/AuthVisitor";
 import AuthEmployeeEstudent from "./pages/AuthEmployeeEstudent";
 import RegisterVisitor from "./pages/RegisterVisitor";
 import IdentifyVisitor from "./pages/IdentifyVisitor";
+import SignUp from "./pages/SignUp";
 
 function App() {
   const navigate = useNavigate();
@@ -45,6 +46,7 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/authvisitor" element={<AuthVisitor />} />
         <Route path="/authclient" element={<AuthEmployeeEstudent />} />
         <Route path="/registervisitor" element={<RegisterVisitor />} />

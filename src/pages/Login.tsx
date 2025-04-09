@@ -83,7 +83,10 @@ function Login() {
                 onChange={handleChange}
               />
             </div>
-            <div className="lg:w-4/5 w-2/3 lg:flex justify-end pl-2 pr-2 hover:text-blue-700 cursor-pointer">
+            <div
+              className="lg:w-4/5 w-2/3 lg:flex justify-end pl-2 pr-2 hover:text-blue-700 cursor-pointer"
+              onClick={() => navigate("/signup")}
+            >
               <p>¿No tienes un usuario?</p>
             </div>
 
