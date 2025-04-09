@@ -57,44 +57,53 @@ function Login() {
       <Header />
       <main className="flex-grow p-4 content-center items-center w-3/5 mx-auto">
         <div className="rounded-sm h-1 bg-gray-400"></div>
-        <div className="h-70 flex flex-col items-center sm:max-lg:mb-5">
+        <div className=" flex flex-col gap-y-7 items-center pt-10">
           <p className="text-3xl pt-5">Ingresa tu correo y contraseña</p>
-          <form
-            className="w-4/5 h-40 pt-10 flex flex-col items-center gap-y-3"
-            onSubmit={handleSubmit}
-          >
-            <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2 bg-white">
-              <label className="w-1/3">Correo Electrónico:</label>
-              <input
-                name="correo"
-                type="email"
-                placeholder="Email"
-                className="bg-gray-200 rounded-sm border-gray-300 border-2"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2">
-              <label className="w-1/3">Contraseña:</label>
-              <input
-                name="password"
-                type="password"
-                placeholder="Password"
-                className="bg-gray-200 rounded-sm border-gray-300 border-2"
-                onChange={handleChange}
-              />
-            </div>
-            <div
-              className="lg:w-4/5 w-2/3 lg:flex justify-end pl-2 pr-2 hover:text-blue-700 cursor-pointer"
-              onClick={() => navigate("/signup")}
-            >
-              <p>¿No tienes un usuario?</p>
-            </div>
-
-            <button className="rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white">
-              Iniciar Sesión
-            </button>
-          </form>
         </div>
+
+        <div className="flex flex-col items-center pt-5">
+          <div className="flex flex-col gap-y-7 items-center pt-5 mb-10">
+            {/**Aqui iba el formulario */}
+            <form
+              className="flex flex-col  w-3/3 pt-5 items-center"
+              onSubmit={handleSubmit}
+            >
+              <div className="flex flex-row gap-x-10 w-3/3 pt-5">
+                <label className="w-1/6">Correo Electrónico:</label>
+                <input
+                  name="correo"
+                  type="email"
+                  placeholder="Email"
+                  className="w-5/6 bg-gray-200 rounded-sm border-gray-300 border-2 pl-2 pr-2"
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="flex flex-row gap-x-10 w-3/3 pt-5">
+                <label className="w-1/6">Contraseña:</label>
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="Password"
+                  className="w-5/6 bg-gray-200 rounded-sm border-gray-300 border-2 pl-2 pr-2"
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="flex justify-end p-2 w-6/6">
+                <p
+                  className="hover:text-blue-700 cursor-pointer"
+                  onClick={() => navigate("/signup")}
+                >
+                  ¿No tienes un usuario?
+                </p>
+              </div>
+
+              <button className="w-3/6 rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10">
+                Iniciar Sesión
+              </button>
+            </form>
+          </div>
+        </div>
+
         <div className="rounded-sm h-1 bg-gray-400"></div>
       </main>
       <Footer />
@@ -103,3 +112,8 @@ function Login() {
 }
 
 export default Login;
+
+/**
+ *
+ *
+ */

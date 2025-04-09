@@ -160,8 +160,8 @@ function IdentifyVisitor() {
                     </select>
                   </div>
 
-                  <button className="w-2/6 rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10">
-                    Crear usuario
+                  <button className=" rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10">
+                    Registrar visita
                   </button>
                 </form>
               </div>

@@ -78,27 +78,13 @@ const CameraCapture: React.FC<CameraProps> = ({ onCapture }) => {
   };
 
   return (
-    <div
-      style={{
-        width: "100%",
-        maxWidth: "500px",
-        margin: "20px auto",
-        padding: "20px",
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-      }}
-    >
+    <div className="w-full flex flex-col items-center border-gray-300 border-1 rounded-lg p-2 mb-5 mt-5">
       {!isPhoto && (
         <video
           ref={videoRef}
           autoPlay
           playsInline
-          style={{
-            width: "350px",
-            maxHeight: "350px",
-            backgroundColor: "#000",
-            borderRadius: "4px",
-          }}
+          className="rounded-2xl w-[350px] h-[350px]"
         />
       )}
 

@@ -26,11 +26,12 @@ function RegisterVisitor() {
     data: string;
     fileName: string;
   } | null>(null);
+  const [clicked, setClicked] = useState(false);
 
-  //const navigate = useNavigate();
+  const handleClick = () => {
+    setClicked(true);
+  };
 
-  // Maneja la foto recibida del componente hijo
-  // Maneja la foto recibida del componente hijo y le asigna un nombre
   const handlePhotoCapture = (photoData: string) => {
     console.log("Foto recibida del hijo:", photoData);
 
@@ -123,7 +124,7 @@ function RegisterVisitor() {
         formDataImage.append("file", blob, capturedPhoto.fileName);
       }
 
-      // Agregar los demás datos del formulario
+      // Agregar los demás datos dael formulario
       Object.entries(formData).forEach(([key, value]) => {
         if (key !== "foto") {
           formDataImage.append(
@@ -170,13 +171,12 @@ function RegisterVisitor() {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow p-4 content-center justify-center items-center w-3/5 mx-auto h-225">
-        <p className="pb-3 text-2xl">Registrar visitante</p>
+      <main className="flex-grow p-4 content-center items-center w-3/5 mx-auto">
+        <p className="pb-3 text-2xl">Seleccione una opción</p>
         <div className="rounded-sm h-1 bg-gray-400"></div>
-        <div className=" h-200 flex flex-col items-center sm:max-lg:mb-5">
-          {/*El boton de salir */}
+        <div className=" flex flex-col gap-y-7 items-center pt-10">
           <div
             className="flex flex-row items-center gap-x-10 w-3/3 pt-5 cursor-pointer "
             onClick={() => handleRoute("/authvisitor")}
@@ -186,88 +186,100 @@ function RegisterVisitor() {
               Atrás
             </div>
           </div>
-          <form
-            className="w-4/5 h-40 pt-10 flex flex-col items-center gap-y-3"
-            onSubmit={handleSubmit}
-          >
-            {/* Campo dni con formateo automático */}
-            <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2 bg-white">
-              <label className="w-1/3">dni:</label>
-              <input
-                name="dni"
-                type="text"
-                placeholder="0000-0000-00000"
-                value={formData.dni} // Se mantiene sincronizado con el estado
-                maxLength={15} // 13 números + 2 guiones
-                className="bg-gray-200 rounded-sm border-gray-300 border-2"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2 bg-white">
-              <label className="w-1/3">Nombres</label>
-              <input
-                name="nombres"
-                type="text"
-                placeholder="Primer y segundo nombre"
-                className="bg-gray-200 rounded-sm border-gray-300 border-2"
-                onChange={handleChange}
-              />
-            </div>
-            <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2 bg-white">
-              <label className="w-1/3">Apellidos</label>
-              <input
-                name="apellidos"
-                type="text"
-                placeholder="Primer y segundo apellido"
-                className="bg-gray-200 rounded-sm border-gray-300 border-2"
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2 bg-white">
-              <label className="w-1/3">Correo Electrónico:</label>
-              <input
-                name="correo"
-                type="email"
-                placeholder="correo"
-                className="bg-gray-200 rounded-sm border-gray-300 border-2"
-                onChange={handleChange}
-              />
-            </div>
-            {correoError && (
-              <p className="text-red-500 text-sm">{correoError}</p>
-            )}
-            <CameraCapture onCapture={handlePhotoCapture} />
-
-            {capturedPhoto && (
-              <FaceDescriptorExtractor
-                photoData={capturedPhoto.data}
-                onDescriptorReady={(descriptor) => {
-                  if (descriptor) {
-                    setFormData((prev) => ({
-                      ...prev,
-                      descriptor_facial: descriptor,
-                    }));
-                  }
-                }}
-              />
-            )}
-
-            <button
-              className={
-                formData.descriptor_facial.length !== 0 &&
-                formData.nombres &&
-                formData.apellidos &&
-                formData.dni
-                  ? `rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white `
-                  : `rounded-sm bg-gray-400 p-1 pl-5 pr-5  text-white`
-              }
-              disabled={!!correoError || !formData.descriptor_facial}
-            >
-              Crear usuario
-            </button>
-          </form>
         </div>
+
+        <div className="flex flex-col gap-y-7 items-center pt-5 mb-10">
+          {/**Aqui iba el formulario */}
+          <div className="flex flex-col gap-y-7 items-center pt-5 mb-10">
+            <form
+              className="flex flex-col  w-3/3 pt-5 items-center"
+              //onSubmit={handleSubmit}
+            >
+              <div className="flex flex-row gap-x-10 w-3/3 pt-5">
+                <label className="w-1/6">dni:</label>
+                <input
+                  name="dni"
+                  type="text"
+                  placeholder="0000-0000-00000"
+                  value={formData.dni} // Se mantiene sincronizado con el estado
+                  maxLength={15} // 13 números + 2 guiones
+                  className="w-5/6 bg-gray-200 rounded-sm border-gray-300 border-2 pl-2 pr-2"
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="flex flex-row gap-x-10 w-3/3 pt-5">
+                <label className="w-1/6">Nombres</label>
+                <input
+                  name="nombres"
+                  type="text"
+                  placeholder="Primer y segundo nombre"
+                  className="w-5/6 bg-gray-200 rounded-sm border-gray-300 border-2 pl-2 pr-2"
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="flex flex-row gap-x-10 w-3/3 pt-5">
+                <label className="w-1/6">Apellidos</label>
+                <input
+                  name="apellidos"
+                  type="text"
+                  placeholder="Primer y segundo apellido"
+                  className="w-5/6 bg-gray-200 rounded-sm border-gray-300 border-2 pl-2 pr-2"
+                  onChange={handleChange}
+                />
+              </div>
+
+              <div className="flex flex-row gap-x-10 w-3/3 pt-5">
+                <label className="w-1/6">Correo Electrónico:</label>
+                <input
+                  name="correo"
+                  type="email"
+                  placeholder="correo"
+                  className="w-5/6 bg-gray-200 rounded-sm border-gray-300 border-2 pl-2 pr-2"
+                  onChange={handleChange}
+                />
+              </div>
+              {correoError && (
+                <p className="text-red-500 text-sm">{correoError}</p>
+              )}
+
+              <CameraCapture onCapture={handlePhotoCapture} />
+
+              {capturedPhoto && (
+                <FaceDescriptorExtractor
+                  photoData={capturedPhoto.data}
+                  onDescriptorReady={(descriptor) => {
+                    if (descriptor) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        descriptor_facial: descriptor,
+                      }));
+                    }
+                  }}
+                />
+              )}
+
+              <button
+                onClick={(e) => {
+                  handleClick();
+                  handleSubmit(e);
+                }}
+                className={
+                  formData.descriptor_facial.length !== 0 &&
+                  formData.nombres &&
+                  formData.apellidos &&
+                  formData.dni &&
+                  !clicked
+                    ? `rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white `
+                    : `rounded-sm bg-gray-400 p-1 pl-5 pr-5  text-white`
+                }
+                disabled={clicked || !formData.descriptor_facial}
+              >
+                Crear usuario
+              </button>
+            </form>
+          </div>
+        </div>
+
         <div className="rounded-sm h-1 bg-gray-400"></div>
       </main>
       <Footer />
@@ -276,3 +288,8 @@ function RegisterVisitor() {
 }
 
 export default RegisterVisitor;
+
+/**
+ *
+ *
+ */
