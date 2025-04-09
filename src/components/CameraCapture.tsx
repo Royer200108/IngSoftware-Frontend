@@ -115,7 +115,7 @@ const CameraCapture: React.FC<CameraProps> = ({ onCapture }) => {
           <button
             onClick={takePhoto}
             disabled={!stream}
-            className="rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white"
+            className="rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white cursor-pointer"
           >
             Tomar Foto
           </button>
@@ -124,7 +124,7 @@ const CameraCapture: React.FC<CameraProps> = ({ onCapture }) => {
         {isPhoto && (
           <button
             onClick={resetPhoto}
-            className="rounded-sm bg-blue-300 p-1 pl-5 pr-5 hover:bg-[#003274] text-white"
+            className="rounded-sm bg-blue-300 p-1 pl-5 pr-5 hover:bg-[#003274] text-white cursor-pointer"
           >
             Volver a Capturar
           </button>

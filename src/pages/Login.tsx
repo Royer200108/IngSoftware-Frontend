@@ -97,7 +97,7 @@ function Login() {
                 </p>
               </div>
 
-              <button className="w-3/6 rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10">
+              <button className=" rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10 cursor-pointer">
                 Iniciar Sesión
               </button>
             </form>

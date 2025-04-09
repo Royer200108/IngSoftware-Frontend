@@ -149,7 +149,7 @@ function IdentifyVisitor() {
                     <select
                       name="motivosVisita"
                       id="motivos"
-                      className="w-5/6 bg-gray-200 rounded-sm border-gray-300 border-2 pl-2 pr-2"
+                      className="w-5/6 bg-gray-200 rounded-sm border-gray-300 border-2 pl-2 pr-2 cursor-pointer"
                     >
                       <option key="0"></option>
                       {visitReasons.map((motivo) => (
@@ -160,7 +160,7 @@ function IdentifyVisitor() {
                     </select>
                   </div>
 
-                  <button className=" rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10">
+                  <button className=" rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10 cursor-pointer">
                     Registrar visita
                   </button>
                 </form>

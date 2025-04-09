@@ -269,8 +269,8 @@ function RegisterVisitor() {
                   formData.apellidos &&
                   formData.dni &&
                   !clicked
-                    ? `rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white `
-                    : `rounded-sm bg-gray-400 p-1 pl-5 pr-5  text-white`
+                    ? `rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white cursor-pointer`
+                    : `rounded-sm bg-gray-400 p-1 pl-5 pr-5  text-white `
                 }
                 disabled={clicked || !formData.descriptor_facial}
               >

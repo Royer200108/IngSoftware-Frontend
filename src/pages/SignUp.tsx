@@ -187,7 +187,7 @@ function SignUp() {
                 />
               </div>
               <button
-                className="w-3/6 rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10"
+                className=" rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10 cursor-pointer"
                 disabled={!!emailError}
               >
                 Crear usuario
@@ -204,83 +204,3 @@ function SignUp() {
 }
 
 export default SignUp;
-
-/**
- * <form
-              className="w-4/5 h-40 pt-10 flex flex-col items-center gap-y-3"
-              onSubmit={handleSubmit}
-            >
-              <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2 bg-white">
-                <label className="w-1/3">Identidad:</label>
-                <input
-                  name="identidad"
-                  type="text"
-                  placeholder="0000-0000-00000"
-                  value={formData.identidad}
-                  maxLength={15}
-                  className="bg-gray-200 rounded-sm border-gray-300 border-2"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2 bg-white">
-                <label className="w-1/3">Nombres</label>
-                <input
-                  name="nombre"
-                  type="text"
-                  placeholder="Primer y segundo nombre"
-                  className="bg-gray-200 rounded-sm border-gray-300 border-2"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2 bg-white">
-                <label className="w-1/3">Apellidos</label>
-                <input
-                  name="apellidos"
-                  type="text"
-                  placeholder="Primer y segundo apellido"
-                  className="bg-gray-200 rounded-sm border-gray-300 border-2"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2 ">
-                <label className="w-1/3">Rol:</label>
-                <select
-                  name="rol"
-                  className="bg-gray-200 rounded-sm border-gray-300 border-2 w-56"
-                  onChange={handleChange}
-                >
-                  <option value="1">Empleado</option>
-                  <option value="2">Guardia</option>
-                </select>
-              </div>
-              <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2 bg-white">
-                <label className="w-1/3">Correo Electrónico:</label>
-                <input
-                  name="email"
-                  type="email"
-                  placeholder="Email"
-                  className="bg-gray-200 rounded-sm border-gray-300 border-2"
-                  onChange={handleChange}
-                />
-              </div>
-              {emailError && (
-                <p className="text-red-500 text-sm">{emailError}</p>
-              )}
-              <div className="lg:w-3/5 w-2/3 lg:flex justify-center pl-2 pr-2 ">
-                <label className="w-1/3">Contraseña:</label>
-                <input
-                  name="password"
-                  type="password"
-                  placeholder="Password"
-                  className="bg-gray-200 rounded-sm border-gray-300 border-2"
-                  onChange={handleChange}
-                />
-              </div>
-              <button
-                className="rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white"
-                disabled={!!emailError}
-              >
-                Crear usuario
-              </button>
-            </form>
- */
