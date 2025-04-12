@@ -13,19 +13,19 @@ import IngresosPorMetodo from './IngresosPorMetodo';
 
   useEffect(() => {
   
-    fetch('/api/ingresos/por-dia')
+    fetch('http://localhost:3000/ingresos/por-dia')
       .then(res => res.json())
       .then(data => setPorDia(data));
 
-    fetch('/api/ingresos/por-tipo')
+    fetch('http://localhost:3000/ingresos/por-tipo')
       .then(res => res.json())
       .then(data => setPorTipo(data));
 
-    fetch('/api/ingresos/por-centro')
+    fetch('http://localhost:3000/ingresos/por-centro')
       .then(res => res.json())
       .then(data => setPorCentro(data));
 
-    fetch('/api/ingresos/por-metodo')
+    fetch('http://localhost:3000/ingresos/por-metodo')
       .then(res => res.json())
       .then(data => setPorMetodo(data));
   }, []);
