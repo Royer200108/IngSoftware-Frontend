@@ -28,7 +28,11 @@ const IngresosPorCarrera: React.FC<Props> = ({ data }) => {
     ],
   };
 
-  return <Doughnut data={chartData} />;
+  return (
+    <div className="max-w-md mx-auto">
+      <Doughnut data={chartData} />
+    </div>
+  );
 };
 
 export default IngresosPorCarrera;

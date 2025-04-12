@@ -24,8 +24,12 @@ const IngresosPorTipoPersona: React.FC<Props> = ({ data }) => {
       },
     ],
   };
-
-  return <Pie data={chartData} />;
+  return (
+    <div className="max-w-md mx-auto">
+      <Pie data={chartData} />
+    </div>
+  );
+  
 };
 
 export default IngresosPorTipoPersona;

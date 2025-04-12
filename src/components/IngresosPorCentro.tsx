@@ -27,8 +27,12 @@ const IngresosPorCentro: React.FC<Props> = ({ data }) => {
       },
     ],
   };
-
-  return <Bar data={chartData} />;
+  return (
+    <div className="max-w-3xl mx-auto">
+      <Bar data={chartData} />
+    </div>
+  );
+  
 };
 
 export default IngresosPorCentro;
