@@ -8,7 +8,7 @@ import Arrow from "../assets/blue_arrow.png";
 //function HomePage({ token }: Props) {
 function HomePage() {
   const navigate = useNavigate();
-  const pages: string[] = ["/authclient", "/authvisitor"];
+  const pages: string[] = ["/authclient", "/authvisitor", "/reports"];
 
   async function cerrarSesion() {
     const response = await fetch("http://localhost:3000/auth/logout", {
@@ -58,6 +58,15 @@ function HomePage() {
                 <img src={Arrow} alt="" />
                 <div className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md">
                   Identificar visitante
+                </div>
+              </div>
+              <div
+                className="flex flex-row items-center gap-x-10 cursor-pointer"
+                onClick={() => handleChange(2)}
+              >
+                <img src={Arrow} alt="" />
+                <div className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md">
+                  Reportes
                 </div>
               </div>
             </div>
