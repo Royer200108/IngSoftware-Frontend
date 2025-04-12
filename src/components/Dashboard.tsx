@@ -1,18 +1,18 @@
-// src/components/Dashboard.jsx
 import { useEffect, useState } from 'react';
 import IngresosPorDia from './IngresosPorDia';
 import IngresosPorTipoPersona from './IngresosPorTipoPersona';
 import IngresosPorCentro from './IngresosPorCentro';
 import IngresosPorMetodo from './IngresosPorMetodo';
+import IngresosPorCarrera from './IngresosPorCarrera';
 
- function Dashboard() {
+function Dashboard() {
   const [porDia, setPorDia] = useState([]);
   const [porTipo, setPorTipo] = useState([]);
   const [porCentro, setPorCentro] = useState([]);
   const [porMetodo, setPorMetodo] = useState([]);
+  const [porCarrera, setPorCarrera] = useState([]); 
 
   useEffect(() => {
-  
     fetch('http://localhost:3000/ingresos/por-dia')
       .then(res => res.json())
       .then(data => setPorDia(data));
@@ -28,6 +28,10 @@ import IngresosPorMetodo from './IngresosPorMetodo';
     fetch('http://localhost:3000/ingresos/por-metodo')
       .then(res => res.json())
       .then(data => setPorMetodo(data));
+
+    fetch('http://localhost:3000/ingresos/por-carrera') 
+      .then(res => res.json())
+      .then(data => setPorCarrera(data)); 
   }, []);
 
   return (
@@ -51,7 +55,14 @@ import IngresosPorMetodo from './IngresosPorMetodo';
         <h2 className="text-lg font-semibold mb-2">Ingresos por Método</h2>
         <IngresosPorMetodo data={porMetodo} />
       </div>
+
+      
+      <div className="shadow-lg rounded-xl p-4 border">
+        <h2 className="text-lg font-semibold mb-2">Ingresos por Carrera</h2>
+        <IngresosPorCarrera data={porCarrera} />
+      </div>
     </div>
   );
 }
+
 export default Dashboard;
