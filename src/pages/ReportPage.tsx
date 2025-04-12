@@ -18,7 +18,7 @@ interface IngresoDia {
   cantidad_ingresos: number;
 }
 interface IngresoMetodo {
-  metodo: string;
+  metodo_ingreso: string;
   cantidad_ingresos: number;
 }
 interface IngresoCarrera {
