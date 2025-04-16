@@ -15,7 +15,10 @@ import ReportPage from "./pages/ReportPage";
 
 function App() {
   const navigate = useNavigate();
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState<{ id: string; email: string }>({
+    id: "",
+    email: "",
+  });
 
   async function verSesion() {
     const response = await fetch("http://localhost:3000/auth/verificarLogin", {
@@ -29,8 +32,9 @@ function App() {
     }
 
     const data = await response.json();
-    console.log("Estado de autenticación:", data);
+    console.log("Estado de autenticación:", data.isAuthenticated);
     setUser(data.user);
+    console.log("La informacion del usuario ", user);
     if (!data.isAuthenticated) {
       navigate("/login"); // Redirigir si no hay sesión activa
     }
@@ -51,7 +55,10 @@ function App() {
         <Route path="/authvisitor" element={<AuthVisitor />} />
         <Route path="/authclient" element={<AuthEmployeeEstudent />} />
         <Route path="/registervisitor" element={<RegisterVisitor />} />
-        <Route path="/identifyvisitor" element={<IdentifyVisitor />} />
+        <Route
+          path="/identifyvisitor/:motivo_visita"
+          element={<IdentifyVisitor userState={user} />}
+        />
         <Route path="/reports" element={<ReportPage />} />
       </Routes>
     </>

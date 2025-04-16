@@ -4,18 +4,32 @@ import FaceRecognition from "../components/FaceRecognition";
 
 import { useNavigate } from "react-router-dom";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 import Arrow from "../assets/blue_arrow.png";
 
+interface Props {
+  userState: {
+    id: string;
+    email: string;
+  };
+}
+
 //function HomePage({ token }: Props) {
-function IdentifyVisitor() {
+function IdentifyVisitor({ userState }: Props) {
   const navigate = useNavigate();
+  const motivo = useParams();
+  console.log("El motivo de visita es: ", motivo.motivo_visita);
+
   const [identifiedUser, setIdentifiedUser] = useState<{
+    id_persona: string;
     dni: string;
     nombres: string;
     apellidos: string;
     descriptor_facial: number[];
     fotografia: string;
+    motivos_visita: string;
+    guardia_uuid: string;
   } | null>(null);
   const [visitReasons, setVisitReasons] = useState<
     { id_motivo_visita: number; descripcion: string }[]
@@ -23,31 +37,36 @@ function IdentifyVisitor() {
   const [identified, setIdenfied] = useState(false);
 
   const handleUserIdentified = (user: {
+    id_persona: string;
     dni: string;
     nombres: string;
     apellidos: string;
     descriptor_facial: number[];
     fotografia: string;
+    motivos_visita: string;
+    guardia_uuid: string;
   }) => {
     setIdentifiedUser(user);
     console.log("Usuario identificado:", user);
     setIdenfied(true);
+
+    setIdentifiedUser((prevIdentifiedUser) => ({
+      id_persona: prevIdentifiedUser?.id_persona || "",
+      dni: prevIdentifiedUser?.dni || "",
+      nombres: prevIdentifiedUser?.nombres || "",
+      apellidos: prevIdentifiedUser?.apellidos || "",
+      descriptor_facial: prevIdentifiedUser?.descriptor_facial || [],
+      fotografia: prevIdentifiedUser?.fotografia || "",
+      motivos_visita: motivo.motivo_visita || "",
+      guardia_uuid: userState?.id || "",
+    }));
+
+    console.log("Se debio ingresar el uuid: ", identifiedUser);
   };
 
   function handleRoute(url: string) {
     //sessionStorage.removeItem("token");
     navigate(url);
-  }
-
-  //Actualiza en tiempo real todo lo que se escribe dentro de la consola
-  //function handleChange(
-  //  event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  //) {
-  //  console.log("Hola");
-  //}
-
-  function handleSubmit() {
-    console.log("Hola Mundo");
   }
 
   async function obtenerMotivos() {
@@ -85,10 +104,67 @@ function IdentifyVisitor() {
       if (data) {
         setVisitReasons(data);
       }
+      console.log(
+        "La informacion traida desde App: ",
+        userState.id,
+        " ",
+        userState.email
+      );
     };
 
     initialize();
-  }, []);
+  }, [userState.email, userState.id]);
+
+  function handleChange(
+    event: ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) {
+    const { name, value } = event.target;
+
+    setIdentifiedUser((prevIdentifiedUser) => ({
+      id_persona: prevIdentifiedUser?.id_persona || "",
+      dni: prevIdentifiedUser?.dni || "",
+      nombres: prevIdentifiedUser?.nombres || "",
+      apellidos: prevIdentifiedUser?.apellidos || "",
+      descriptor_facial: prevIdentifiedUser?.descriptor_facial || [],
+      fotografia: prevIdentifiedUser?.fotografia || "",
+      motivos_visita: prevIdentifiedUser?.motivos_visita || "",
+      guardia_uuid: prevIdentifiedUser?.guardia_uuid || "",
+      [name]: value,
+    }));
+    console.log("La informacion del usuario: ", identifiedUser);
+  }
+
+  //Envia la información obtenida
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+
+    try {
+      const formResponse = await fetch(
+        "http://localhost:3000/persona/registrarIngreso",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_persona: identifiedUser?.id_persona,
+            motivo_visita: identifiedUser?.motivos_visita,
+            metodo_ingreso: "Reconocimiento Facial",
+            uuid_usuario: identifiedUser?.guardia_uuid,
+          }),
+        }
+      );
+
+      if (!formResponse.ok) {
+        throw new Error("Error en el registro");
+      }
+
+      console.log("Usuario registrado exitosamente");
+      navigate("/");
+    } catch (error) {
+      console.error("Error de autenticación:", error);
+    }
+  }
 
   return (
     <>
@@ -125,7 +201,7 @@ function IdentifyVisitor() {
           </div>
 
           <div className="flex flex-col gap-y-7 items-center pt-5 mb-10">
-            {identifiedUser ? (
+            {identifiedUser?.dni ? (
               <div>
                 <div className="flex flex-row gap-x-10 w-3/3 pt-5">
                   <p className="w-1/6">Usuario: </p>
@@ -139,17 +215,18 @@ function IdentifyVisitor() {
                     {identifiedUser.dni}
                   </p>
                 </div>
-
-                <form
-                  onClick={handleSubmit}
-                  className="flex flex-col  w-3/3 pt-5 items-center"
-                >
+                {/*console.log(
+                  "La informacion actual del usuario: ",
+                  identifiedUser
+                )*/}
+                <form className="flex flex-col  w-3/3 pt-5 items-center">
                   <div className="flex flex-row gap-x-10 w-3/3">
                     <p className="w-1/6">Motivo de visita: </p>
                     <select
-                      name="motivosVisita"
+                      name="motivos_visita"
                       id="motivos"
                       className="w-5/6 bg-gray-200 rounded-sm border-gray-300 border-2 pl-2 pr-2 cursor-pointer"
+                      onChange={handleChange}
                     >
                       <option key="0"></option>
                       {visitReasons.map((motivo) => (
@@ -160,7 +237,10 @@ function IdentifyVisitor() {
                     </select>
                   </div>
 
-                  <button className=" rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10 cursor-pointer">
+                  <button
+                    className=" rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10 cursor-pointer"
+                    onClick={handleSubmit}
+                  >
                     Registrar visita
                   </button>
                 </form>

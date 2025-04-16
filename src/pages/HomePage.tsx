@@ -31,8 +31,6 @@ function HomePage() {
 
   return (
     <>
-      <div>HomePage</div>
-
       <div className="flex flex-col min-h-screen">
         <Header />
 
@@ -70,6 +68,7 @@ function HomePage() {
                 </div>
               </div>
             </div>
+
             <div
               className="flex flex-row items-center gap-x-10 w-3/3 pt-5 cursor-pointer "
               onClick={handleLogout}

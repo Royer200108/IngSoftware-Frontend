@@ -3,11 +3,14 @@ import * as faceapi from "face-api.js";
 //import supabase from "../supabase/client";
 
 interface User {
+  id_persona: string;
   dni: string;
   nombres: string;
   apellidos: string;
   descriptor_facial: number[];
   fotografia: string;
+  motivos_visita: string;
+  guardia_uuid: string;
   descriptor?: Float32Array;
 }
 
@@ -35,8 +38,8 @@ const FaceRecognition: React.FC<FaceRecognitionSystemProps> = ({
         }
       );
 
-      console.log("Estado de la respuesta:", responsePersonas.status); // Imprime el código de estado HTTP
-      console.log("Headers de la respuesta:", responsePersonas.headers);
+      //console.log("Estado de la respuesta:", responsePersonas.status); // Imprime el código de estado HTTP
+      //console.log("Headers de la respuesta:", responsePersonas.headers);
 
       if (!responsePersonas.ok) {
         const errorText = await responsePersonas.text(); // Captura el mensaje de error del servidor
@@ -49,7 +52,7 @@ const FaceRecognition: React.FC<FaceRecognitionSystemProps> = ({
       }
 
       const data = await responsePersonas.json();
-      console.log("Datos recibidos:", data);
+      //console.log("Datos recibidos:", data);
       return data;
     } catch (error) {
       console.error("Error en la petición:", error);
@@ -59,7 +62,7 @@ const FaceRecognition: React.FC<FaceRecognitionSystemProps> = ({
   useEffect(() => {
     const initialize = async () => {
       const data = await obtenerPersonas();
-      console.log("La data obtenida es: ", data);
+      //console.log("La data obtenida es: ", data);
       try {
         await Promise.all([
           faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),

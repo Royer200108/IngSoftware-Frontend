@@ -1,10 +1,12 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import CameraCapture from "../components/CameraCapture";
+import FaceDescriptorExtractor from "../components/FaceDescriptorExtractor";
 //import supabase from "../client";
 
 import Arrow from "../assets/blue_arrow.png";
 
-import { useState, ChangeEvent } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 function SignUp() {
@@ -12,11 +14,29 @@ function SignUp() {
     identidad: "",
     nombre: "",
     apellidos: "",
-    rol: 1,
+    rol: "",
+    centros: "",
+    areas: "",
     email: "",
     password: "",
+    descriptor_facial: [] as number[],
+    foto: "",
   });
   const [emailError, setEmailError] = useState("");
+  const [roles, setRoles] = useState<{ id_rol: number; nombre_rol: string }[]>(
+    []
+  );
+  const [centros, setCentros] = useState<
+    { id_centro_regional: number; centro_regional: string }[]
+  >([]);
+  const [areas, setAreas] = useState<
+    { id_area: number; nombre_area: string; ubicacion: string }[]
+  >([]);
+
+  const [capturedPhoto, setCapturedPhoto] = useState<{
+    data: string;
+    fileName: string;
+  } | null>(null);
 
   const navigate = useNavigate();
 
@@ -40,6 +60,31 @@ function SignUp() {
     }
 
     return formattedValue;
+  };
+
+  const handlePhotoCapture = (photoData: string) => {
+    console.log("Foto recibida del hijo:", photoData);
+
+    // Generar nombre de archivo basado en los datos del formulario
+    const generateFileName = () => {
+      const cleanId = formData.identidad.replace(/-/g, "");
+      const firstName = formData.nombre.split(" ")[0] || "visitante";
+      const firstLastName = formData.apellidos.split(" ")[0] || "anonimo";
+
+      // Formato: ID_Nombre_Apellido_timestamp.jpg
+      return `${cleanId}_${firstName}_${firstLastName}_${Date.now()}.jpg`.toLowerCase();
+    };
+
+    setCapturedPhoto({
+      data: photoData,
+      fileName: generateFileName(), // Asignamos nombre aquí
+    });
+
+    // Actualiza también el campo foto en formData
+    setFormData((prev) => ({
+      ...prev,
+      foto: generateFileName(),
+    }));
   };
 
   function validateEmail(email: string) {
@@ -71,12 +116,134 @@ function SignUp() {
     navigate(url);
   }
 
+  async function obtenerRoles() {
+    try {
+      const responseRoles = await fetch("http://localhost:3000/auth/roles", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!responseRoles.ok) {
+        const errorText = await responseRoles.text(); // Captura el mensaje de error del servidor
+        console.error(
+          "Error al obtener los roles:",
+          responseRoles.status,
+          errorText
+        );
+        return;
+      }
+
+      const data = await responseRoles.json();
+      console.log("Los roles recibidos:", data);
+      return data;
+    } catch (error) {
+      console.error("Error en la petición:", error);
+    }
+  }
+
+  async function obtenerCentros() {
+    try {
+      const responseRoles = await fetch("http://localhost:3000/auth/centros", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!responseRoles.ok) {
+        const errorText = await responseRoles.text(); // Captura el mensaje de error del servidor
+        console.error(
+          "Error al obtener los centros:",
+          responseRoles.status,
+          errorText
+        );
+        return;
+      }
+
+      const data = await responseRoles.json();
+      console.log("Los centros recibidos:", data);
+      return data;
+    } catch (error) {
+      console.error("Error en la petición:", error);
+    }
+  }
+
+  async function obtenerAreas(nombre_centro: string) {
+    try {
+      const responseRoles = await fetch("http://localhost:3000/auth/areas", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nombre_centro }),
+      });
+
+      if (!responseRoles.ok) {
+        const errorText = await responseRoles.text(); // Captura el mensaje de error del servidor
+        console.error(
+          "Error al obtener los centros:",
+          responseRoles.status,
+          errorText
+        );
+        return;
+      }
+
+      const data = await responseRoles.json();
+      console.log("Las areas recibidos:", data);
+      setAreas(data);
+      return data;
+    } catch (error) {
+      console.error("Error en la petición:", error);
+    }
+  }
+
+  useEffect(() => {
+    const initialize = async () => {
+      const roles = await obtenerRoles();
+      const centros = await obtenerCentros();
+
+      if (roles && centros) {
+        setRoles(roles);
+        setCentros(centros);
+      }
+    };
+
+    initialize();
+  }, []);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     setFormData;
     console.log("La data enviada es: ", formData);
     try {
+      const base64ToBlob = async (base64: string) => {
+        const response = await fetch(base64);
+        return await response.blob();
+      };
+
+      const formDataImage = new FormData();
+
+      if (capturedPhoto) {
+        const blob = await base64ToBlob(capturedPhoto.data);
+        formDataImage.append("file", blob, capturedPhoto.fileName);
+      }
+
+      // Agregar los demás datos dael formulario
+      Object.entries(formData).forEach(([key, value]) => {
+        if (key !== "foto") {
+          formDataImage.append(
+            key,
+            typeof value === "object" ? JSON.stringify(value) : value
+          );
+        }
+      });
+
+      const photoResponse = await fetch("http://localhost:3000/image/upload", {
+        method: "POST",
+        body: formDataImage,
+      });
+
+      const finalPhotoResponse = await photoResponse.json();
+      console.log("URL de la imagen:", finalPhotoResponse.imageUrl);
+
+      formData.foto = finalPhotoResponse.imageUrl;
       const response = await fetch("http://localhost:3000/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -159,10 +326,49 @@ function SignUp() {
                   className="w-5/6 bg-gray-200 rounded-sm border-gray-300 border-2 pl-2 pr-2"
                   onChange={handleChange}
                 >
-                  <option value="1">Empleado</option>
-                  <option value="2">Guardia</option>
+                  <option value=""></option>
+                  {roles.map((rol) => (
+                    <option key={rol.id_rol}>{rol.nombre_rol}</option> // Ajusta según la estructura real del objeto
+                  ))}
                 </select>
               </div>
+              <div className="flex flex-row gap-x-10 w-3/3 pt-5">
+                <label className="w-1/6">Centro Regional:</label>
+                <select
+                  name="centros"
+                  className="w-5/6 bg-gray-200 rounded-sm border-gray-300 border-2 pl-2 pr-2"
+                  onChange={(event) => {
+                    handleChange(event);
+                    if (event.target.name === "centros") {
+                      obtenerAreas(event.target.value);
+                    }
+                  }}
+                >
+                  <option value=""></option>
+                  {centros.map((centro) => (
+                    <option key={centro.id_centro_regional}>
+                      {centro.centro_regional}
+                    </option> // Ajusta según la estructura real del objeto
+                  ))}
+                </select>
+              </div>
+              {formData.rol === "Guardia" ? (
+                <div className="flex flex-row gap-x-10 w-3/3 pt-5">
+                  <label className="w-1/6">Area:</label>
+                  <select
+                    name="areas"
+                    className="w-5/6 bg-gray-200 rounded-sm border-gray-300 border-2 pl-2 pr-2"
+                    onChange={handleChange}
+                  >
+                    <option value=""></option>
+                    {areas.map((area) => (
+                      <option key={area.id_area}>{area.nombre_area}</option> // Ajusta según la estructura real del objeto
+                    ))}
+                  </select>
+                </div>
+              ) : (
+                ""
+              )}
               <div className="flex flex-row gap-x-10 w-3/3 pt-5">
                 <label className="w-1/6">Correo Electrónico:</label>
                 <input
@@ -186,6 +392,21 @@ function SignUp() {
                   onChange={handleChange}
                 />
               </div>
+              <CameraCapture onCapture={handlePhotoCapture} />
+
+              {capturedPhoto && (
+                <FaceDescriptorExtractor
+                  photoData={capturedPhoto.data}
+                  onDescriptorReady={(descriptor) => {
+                    if (descriptor) {
+                      setFormData((prev) => ({
+                        ...prev,
+                        descriptor_facial: descriptor,
+                      }));
+                    }
+                  }}
+                />
+              )}
               <button
                 className=" rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10 cursor-pointer"
                 disabled={!!emailError}

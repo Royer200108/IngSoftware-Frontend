@@ -35,7 +35,9 @@ function AuthVisitor() {
             <div className="flex flex-col gap-y-7 pl-5">
               <div
                 className="flex flex-row items-center gap-x-10 cursor-pointer"
-                onClick={() => handleRoute("/identifyvisitor")}
+                onClick={() => {
+                  navigate(`/identifyvisitor/visitante`);
+                }}
               >
                 <img src={Arrow} alt="" />
                 <div className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md">
