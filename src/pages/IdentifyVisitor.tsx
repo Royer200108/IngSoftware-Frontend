@@ -60,8 +60,6 @@ function IdentifyVisitor({ userState }: Props) {
       motivos_visita: motivo.motivo_visita || "",
       guardia_uuid: userState?.id || "",
     }));
-
-    console.log("Se debio ingresar el uuid: ", identifiedUser);
   };
 
   function handleRoute(url: string) {
@@ -238,7 +236,11 @@ function IdentifyVisitor({ userState }: Props) {
                   </div>
 
                   <button
-                    className=" rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white mt-10 cursor-pointer"
+                    className={
+                      identifiedUser.motivos_visita != motivo.motivo_visita
+                        ? `rounded-sm bg-[#003B74] p-1 pl-5 pr-5 mt-10 hover:bg-[#003274] text-white cursor-pointer`
+                        : `rounded-sm bg-gray-400 p-1 pl-5 pr-5 mt-10 text-white `
+                    }
                     onClick={handleSubmit}
                   >
                     Registrar visita
