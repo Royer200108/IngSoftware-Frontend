@@ -1,12 +1,13 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; // Importar el contexto
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 function Login() {
   const navigate = useNavigate();
-  //Almacena los valores escritos en los inputs del formulario
+  const { setUser, setRole, user, role } = useAuth(); // Usamos el contexto
   const [formData, setFormData] = useState<{
     correo: string;
     password: string;
@@ -15,7 +16,7 @@ function Login() {
     password: "",
   });
 
-  //Actualiza en tiempo real todo lo que se escribe dentro de la consola
+  // Actualiza en tiempo real todo lo que se escribe dentro de los inputs del formulario
   function handleChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
@@ -23,15 +24,13 @@ function Login() {
       ...formData,
       [event.target.name]: event.target.value,
     });
-    console.log("FORMATEADO: ", formData);
   }
 
+  // Función para realizar el login
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log("Adios");
 
     try {
-      console.log("Hola");
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -39,17 +38,38 @@ function Login() {
       });
 
       const result = await response.json();
-      console.log("El resultado del login es: ", result);
 
       if (!response.ok) throw new Error(result.error);
 
-      navigate("/");
+      // Actualizar el contexto con los datos del usuario
+      setUser(result.user);
 
-      //console.log(response);
+      // Obtener el rol del usuario
+      const rolResponse = await fetch("http://localhost:3000/auth/rol", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ uuid_guardia: result.user.id }),
+      });
+
+      const rolData = await rolResponse.json();
+      const rolId = rolData[0]?.id_rol;
+      setRole(rolId); // Guardamos el rol en el contexto
     } catch (error) {
-      console.log("Hola");
       console.error("Error de autenticación:", error);
     }
+  }
+
+  // Redirección si ya hay sesión activa
+  useEffect(() => {
+    if (user && role !== null) {
+      if (role === 1) navigate("/reports"); // Si es admin
+      else if (role === 2) navigate("/"); // Si es otro rol
+    }
+  }, [user, role, navigate]);
+
+  // Evitar mostrar el formulario si el usuario ya está autenticado
+  if (user && role !== null) {
+    return <div>Redireccionando...</div>; // O un spinner
   }
 
   return (
@@ -63,7 +83,6 @@ function Login() {
 
         <div className="flex flex-col items-center pt-5">
           <div className="flex flex-col gap-y-7 items-center pt-5 mb-10">
-            {/**Aqui iba el formulario */}
             <form
               className="flex flex-col  w-3/3 pt-5 items-center"
               onSubmit={handleSubmit}
@@ -111,8 +130,3 @@ function Login() {
 }
 
 export default Login;
-
-/**
- *
- *
- */

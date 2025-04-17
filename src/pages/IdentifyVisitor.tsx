@@ -1,3 +1,4 @@
+/*
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import FaceRecognition from "../components/FaceRecognition";
@@ -216,7 +217,7 @@ function IdentifyVisitor({ userState }: Props) {
                 {/*console.log(
                   "La informacion actual del usuario: ",
                   identifiedUser
-                )*/}
+                )}
                 <form className="flex flex-col  w-3/3 pt-5 items-center">
                   <div className="flex flex-row gap-x-10 w-3/3">
                     <p className="w-1/6">Motivo de visita: </p>
@@ -259,4 +260,20 @@ function IdentifyVisitor({ userState }: Props) {
   );
 }
 
+export default IdentifyVisitor;
+*/
+
+import { useAuth } from "../context/AuthContext";
+
+function IdentifyVisitor() {
+  const { user } = useAuth();
+
+  return (
+    <div>
+      <p>Hola, {user?.email}</p>
+      <p>Hola, {user?.id}</p>
+      {/* usa user.id o lo que necesites */}
+    </div>
+  );
+}
 export default IdentifyVisitor;
