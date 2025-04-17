@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Arrow from "../assets/blue_arrow.png";
 
 //function HomePage({ token }: Props) {
-function AuthEmployeeEstudent() {
+function AuthEmployeeStudent() {
   const navigate = useNavigate();
 
   function handleRoute(url: string) {
@@ -52,7 +52,7 @@ function AuthEmployeeEstudent() {
                   <img src={Arrow} alt="" />
                   <div
                     className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md"
-                    onClick={() => handleRoute("")}
+                    onClick={() => handleRoute("/authstudent")}
                   >
                     Identificar estudiante
                   </div>
@@ -68,4 +68,4 @@ function AuthEmployeeEstudent() {
   );
 }
 
-export default AuthEmployeeEstudent;
+export default AuthEmployeeStudent;

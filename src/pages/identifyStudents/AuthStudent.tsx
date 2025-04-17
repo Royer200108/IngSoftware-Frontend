@@ -1,9 +1,9 @@
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
 
 import { useNavigate } from "react-router-dom";
 
-import Arrow from "../assets/blue_arrow.png";
+import Arrow from "../../assets/blue_arrow.png";
 
 //function HomePage({ token }: Props) {
 function AuthVisitor() {
@@ -20,7 +20,7 @@ function AuthVisitor() {
         <Header />
 
         <main className="flex-grow p-4 content-center items-center w-3/5 mx-auto">
-          <p className="pb-3 text-2xl">Seleccione una opción</p>
+          <p className="pb-3 text-2xl">Seleccione el tipo de autenticación</p>
           <div className="rounded-sm h-1 bg-gray-400"></div>
 
           <div className="flex flex-col items-center pt-5">
@@ -29,7 +29,7 @@ function AuthVisitor() {
 
               <div
                 className="flex flex-row items-center gap-x-10 w-3/3 pt-5 cursor-pointer "
-                onClick={() => handleRoute("/")}
+                onClick={() => handleRoute("/authemployeestudent")}
               >
                 <img src={Arrow} alt="" className="rotate-180" />
                 <div className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md">
@@ -40,12 +40,12 @@ function AuthVisitor() {
                 <div
                   className="flex flex-row items-center gap-x-10 cursor-pointer"
                   onClick={() => {
-                    navigate(`/identifyvisitor/visitante`);
+                    navigate(`/identifystudent/Estudio`);
                   }}
                 >
                   <img src={Arrow} alt="" />
                   <div className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md">
-                    Identificar visitante
+                    Reconocimiento facial
                   </div>
                 </div>
                 <div className="flex flex-row items-center gap-x-10 cursor-pointer">
@@ -54,7 +54,7 @@ function AuthVisitor() {
                     className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md"
                     onClick={() => handleRoute("/registervisitor")}
                   >
-                    Registrar visitante
+                    Número de cuenta
                   </div>
                 </div>
               </div>

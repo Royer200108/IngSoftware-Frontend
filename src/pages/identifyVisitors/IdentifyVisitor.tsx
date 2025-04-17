@@ -1,13 +1,13 @@
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import FaceRecognition from "../components/FaceRecognition";
-import { useAuth } from "../context/AuthContext";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import FaceRecognition from "../../components/FaceRecognition";
+import { useAuth } from "../../context/AuthContext";
 
 import { useNavigate } from "react-router-dom";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import Arrow from "../assets/blue_arrow.png";
+import Arrow from "../../assets/blue_arrow.png";
 /*
 interface Props {
   userState: {
@@ -100,7 +100,7 @@ function IdentifyVisitor() {
   useEffect(() => {
     const initialize = async () => {
       const data = await obtenerMotivos();
-
+      console.log("Los motivos de visita: ", data);
       if (data) {
         setVisitReasons(data);
       }

@@ -9,7 +9,7 @@ import Arrow from "../assets/blue_arrow.png";
 function HomePage() {
   const navigate = useNavigate();
   const { setUser, setRole } = useAuth(); // 👈
-  const pages: string[] = ["/authclient", "/authvisitor", "/reports"];
+  const pages: string[] = ["/authemployeestudent", "/authvisitor", "/reports"];
 
   async function cerrarSesion() {
     const response = await fetch("http://localhost:3000/auth/logout", {

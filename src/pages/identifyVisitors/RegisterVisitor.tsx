@@ -1,15 +1,15 @@
-import Footer from "../components/Footer";
-import Header from "../components/Header";
-import CameraCapture from "../components/CameraCapture";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import CameraCapture from "../../components/CameraCapture";
 
 //import supabase from "../client";
 
 import { useState, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import FaceDescriptorExtractor from "../components/FaceDescriptorExtractor";
+import FaceDescriptorExtractor from "../../components/FaceDescriptorExtractor";
 //import { useNavigate } from "react-router-dom";
 
-import Arrow from "../assets/blue_arrow.png";
+import Arrow from "../../assets/blue_arrow.png";
 
 function RegisterVisitor() {
   const navigate = useNavigate();

@@ -4,10 +4,12 @@ import { Routes, Route } from "react-router-dom";
 
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
-import AuthVisitor from "./pages/AuthVisitor";
-import AuthEmployeeEstudent from "./pages/AuthEmployeeEstudent";
-import RegisterVisitor from "./pages/RegisterVisitor";
-import IdentifyVisitor from "./pages/IdentifyVisitor";
+import AuthVisitor from "./pages/identifyVisitors/AuthVisitor";
+import AuthEmployeeStudent from "./pages/AuthEmployeeStudent";
+import RegisterVisitor from "./pages/identifyVisitors/RegisterVisitor";
+import IdentifyVisitor from "./pages/identifyVisitors/IdentifyVisitor";
+import AuthStudent from "./pages/identifyStudents/AuthStudent";
+import IdentifyStudent from "./pages/identifyStudents/IdentifyStudent";
 import SignUp from "./pages/SignUp";
 import ReportPage from "./pages/ReportPage";
 import HomePage from "./pages/HomePage";
@@ -44,8 +46,6 @@ function App() {
         <Route path="*" element={<NotFound />} />
 
         {/* Rutas públicas */}
-        <Route path="/authvisitor" element={<AuthVisitor />} />
-        <Route path="/registervisitor" element={<RegisterVisitor />} />
 
         {/* Ruta solo para usuarios normales (rol 2) */}
 
@@ -58,10 +58,10 @@ function App() {
           }
         />
         <Route
-          path="/authclient"
+          path="/authemployeestudent"
           element={
             <RoleProtectedRoute allowedRoles={[2]}>
-              <AuthEmployeeEstudent />
+              <AuthEmployeeStudent />
             </RoleProtectedRoute>
           }
         />
@@ -75,6 +75,38 @@ function App() {
             }
           />
         }
+        <Route
+          path="/authvisitor"
+          element={
+            <RoleProtectedRoute allowedRoles={[2]}>
+              <AuthVisitor />
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
+          path="/registervisitor"
+          element={
+            <RoleProtectedRoute allowedRoles={[2]}>
+              <RegisterVisitor />
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
+          path="/authstudent"
+          element={
+            <RoleProtectedRoute allowedRoles={[2]}>
+              <AuthStudent />
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
+          path="/identifystudent/:motivo_visita"
+          element={
+            <RoleProtectedRoute allowedRoles={[2]}>
+              <IdentifyStudent />
+            </RoleProtectedRoute>
+          }
+        />
 
         {/* Ruta solo para administradores (rol 1) */}
         <Route
