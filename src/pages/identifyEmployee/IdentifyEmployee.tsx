@@ -20,7 +20,7 @@ interface Props {
 }
 */
 //function HomePage({ token }: Props) {
-function IdentifyStudent() {
+function IdentifyEmployee() {
   const navigate = useNavigate();
   const motivo = useParams();
   console.log("El motivo de visita es: ", motivo.motivo_visita);
@@ -36,11 +36,10 @@ function IdentifyStudent() {
     motivos_visita: string;
     guardia_uuid: string;
   } | null>(null);
-  const [identifiedStudent, setIdentifiedStudent] = useState<{
-    numero_cuenta: string;
-    nombre_carrera: string;
+  const [identifiedEmployee, setIdentifiedEmployee] = useState<{
+    numero_empleado: string;
+    puesto: string;
     centro_regional: string;
-    estado: string;
   } | null>(null);
 
   const [identified, setIdenfied] = useState(false);
@@ -74,7 +73,7 @@ function IdentifyStudent() {
 
     const estudiante = await verificarEstudiante(usuario.id_persona);
     if (estudiante) {
-      setIdentifiedStudent(estudiante); // ya que estás retornando `data` completo
+      setIdentifiedEmployee(estudiante); // ya que estás retornando `data` completo
       console.log("AQUI DEBERIA ESTAR LLENO ", estudiante);
     }
   };
@@ -86,7 +85,7 @@ function IdentifyStudent() {
   async function verificarEstudiante(id_persona: string) {
     try {
       const Response = await fetch(
-        "http://localhost:3000/persona/verificarEstudiante",
+        "http://localhost:3000/persona/verificarEmpleado",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -100,9 +99,9 @@ function IdentifyStudent() {
         throw new Error("Error en el registro");
       }
       const data = await Response.json();
-      console.log("LA DATA OBTENIDA DEL ESTUDIANTE ", data[0]);
-      setIdentifiedStudent(data[0]);
-      console.log("contenido de identifiedStudent: ", identifiedStudent);
+      console.log("LA DATA OBTENIDA DEL Empleado ", data[0]);
+      setIdentifiedEmployee(data[0]);
+      console.log("contenido de identifiedStudent: ", identifiedEmployee);
       return data[0];
     } catch (error) {
       console.error("Error de autenticación:", error);
@@ -150,7 +149,7 @@ function IdentifyStudent() {
           <div className=" flex flex-col gap-y-7 items-center pt-10">
             <div
               className="flex flex-row items-center gap-x-10 w-3/3 pt-5 cursor-pointer "
-              onClick={() => handleRoute("/authstudent")}
+              onClick={() => handleRoute("/authemployee")}
             >
               <img src={Arrow} alt="" className="rotate-180" />
               <div className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md">
@@ -175,7 +174,7 @@ function IdentifyStudent() {
 
           {identifiedUser?.dni ? (
             <div className="flex flex-col gap-y-7 items-center pt-5 mb-10">
-              {identifiedStudent ? (
+              {identifiedEmployee ? (
                 <div className=" w-6/6">
                   <div className="flex flex-row gap-x-10 w-3/3 pt-5">
                     <p className="w-2/6">Usuario: </p>
@@ -197,29 +196,23 @@ function IdentifyStudent() {
                   </div>
 
                   <form className="flex flex-col  w-3/3 p-2 mt-2 items-center border-1 rounded-sm">
-                    <p className="text-1xl w-5/6">Datos del estudiante: </p>
+                    <p className="text-1xl w-5/6">Datos del empleado: </p>
                     <div className="flex flex-row gap-x-10 w-3/3 pt-5">
-                      <p className="w-2/6">Cuenta: </p>
+                      <p className="w-2/6">Numero empleado: </p>
                       <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">
-                        {identifiedStudent.numero_cuenta}
+                        {identifiedEmployee.numero_empleado}
                       </p>
                     </div>
                     <div className="flex flex-row gap-x-10 w-3/3 pt-5">
-                      <p className="w-2/6">Carrera: </p>
+                      <p className="w-2/6">Puesto: </p>
                       <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">
-                        {identifiedStudent.nombre_carrera}
+                        {identifiedEmployee.puesto}
                       </p>
                     </div>
                     <div className="flex flex-row gap-x-10 w-3/3 pt-5">
                       <p className="w-2/6">Centro regional: </p>
                       <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">
-                        {identifiedStudent.centro_regional}
-                      </p>
-                    </div>
-                    <div className="flex flex-row gap-x-10 w-3/3 pt-5">
-                      <p className="w-2/6">Estado: </p>
-                      <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">
-                        {identifiedStudent.estado}
+                        {identifiedEmployee.centro_regional}
                       </p>
                     </div>
                   </form>
@@ -234,7 +227,7 @@ function IdentifyStudent() {
                   </div>
                 </div>
               ) : (
-                <div>Este usuario no es un estudiante</div>
+                <div>Este usuario no es un Empleado</div>
               )}
             </div>
           ) : (
@@ -253,4 +246,4 @@ function IdentifyStudent() {
   );
 }
 
-export default IdentifyStudent;
+export default IdentifyEmployee;

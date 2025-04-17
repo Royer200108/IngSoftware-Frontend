@@ -1,6 +1,8 @@
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import FaceRecognition from "../../components/FaceRecognition";
+import SuccessModal from "../../components/SuccessModal";
+
 import { useAuth } from "../../context/AuthContext";
 
 import { useNavigate } from "react-router-dom";
@@ -37,6 +39,7 @@ function IdentifyVisitor() {
     { id_motivo_visita: number; descripcion: string }[]
   >([]);
   const [identified, setIdenfied] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const handleUserIdentified = (usuario: {
     id_persona: string;
@@ -154,7 +157,7 @@ function IdentifyVisitor() {
       }
 
       console.log("Usuario registrado exitosamente");
-      navigate("/");
+      setShowModal(true); // Mostramos el modal
     } catch (error) {
       console.error("Error de autenticación:", error);
     }
@@ -209,10 +212,6 @@ function IdentifyVisitor() {
                     {identifiedUser.dni}
                   </p>
                 </div>
-                {/*console.log(
-                  "La informacion actual del usuario: ",
-                  identifiedUser
-                )*/}
                 <form className="flex flex-col  w-3/3 pt-5 items-center">
                   <div className="flex flex-row gap-x-10 w-3/3">
                     <p className="w-1/6">Motivo de visita: </p>
@@ -233,7 +232,8 @@ function IdentifyVisitor() {
 
                   <button
                     className={
-                      identifiedUser.motivos_visita != motivo.motivo_visita
+                      identifiedUser.motivos_visita != motivo.motivo_visita &&
+                      identifiedUser.motivos_visita != ""
                         ? `rounded-sm bg-[#003B74] p-1 pl-5 pr-5 mt-10 hover:bg-[#003274] text-white cursor-pointer`
                         : `rounded-sm bg-gray-400 p-1 pl-5 pr-5 mt-10 text-white `
                     }
@@ -251,24 +251,10 @@ function IdentifyVisitor() {
         </main>
         <Footer />
       </div>
+
+      {showModal && <SuccessModal setShowModal={setShowModal} />}
     </>
   );
 }
 
 export default IdentifyVisitor;
-
-/*
-import { useAuth } from "../context/AuthContext";
-
-function IdentifyVisitor() {
-  const { user } = useAuth();
-
-  return (
-    <div>
-      <p>Hola, {user?.email}</p>
-      <p>Hola, {user?.id}</p>
-    </div>
-  );
-}
-export default IdentifyVisitor;
-*/

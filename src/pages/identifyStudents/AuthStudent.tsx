@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Arrow from "../../assets/blue_arrow.png";
 
 //function HomePage({ token }: Props) {
-function AuthVisitor() {
+function AuthStudent() {
   const navigate = useNavigate();
 
   function handleRoute(url: string) {
@@ -20,7 +20,9 @@ function AuthVisitor() {
         <Header />
 
         <main className="flex-grow p-4 content-center items-center w-3/5 mx-auto">
-          <p className="pb-3 text-2xl">Seleccione el tipo de autenticación</p>
+          <p className="pb-3 text-2xl">
+            Seleccione el tipo de autenticación para el Estudiante
+          </p>
           <div className="rounded-sm h-1 bg-gray-400"></div>
 
           <div className="flex flex-col items-center pt-5">
@@ -52,7 +54,7 @@ function AuthVisitor() {
                   <img src={Arrow} alt="" />
                   <div
                     className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md"
-                    onClick={() => handleRoute("/registervisitor")}
+                    onClick={() => handleRoute("/")}
                   >
                     Número de cuenta
                   </div>
@@ -68,4 +70,4 @@ function AuthVisitor() {
   );
 }
 
-export default AuthVisitor;
+export default AuthStudent;

@@ -9,7 +9,9 @@ import AuthEmployeeStudent from "./pages/AuthEmployeeStudent";
 import RegisterVisitor from "./pages/identifyVisitors/RegisterVisitor";
 import IdentifyVisitor from "./pages/identifyVisitors/IdentifyVisitor";
 import AuthStudent from "./pages/identifyStudents/AuthStudent";
+import AuthEmployee from "./pages/identifyEmployee/AuthEmployee";
 import IdentifyStudent from "./pages/identifyStudents/IdentifyStudent";
+import IdentifyEmployee from "./pages/identifyEmployee/IdentifyEmployee";
 import SignUp from "./pages/SignUp";
 import ReportPage from "./pages/ReportPage";
 import HomePage from "./pages/HomePage";
@@ -104,6 +106,22 @@ function App() {
           element={
             <RoleProtectedRoute allowedRoles={[2]}>
               <IdentifyStudent />
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
+          path="/authemployee"
+          element={
+            <RoleProtectedRoute allowedRoles={[2]}>
+              <AuthEmployee />
+            </RoleProtectedRoute>
+          }
+        />
+        <Route
+          path="/identifyemployee/:motivo_visita"
+          element={
+            <RoleProtectedRoute allowedRoles={[2]}>
+              <IdentifyEmployee />
             </RoleProtectedRoute>
           }
         />
