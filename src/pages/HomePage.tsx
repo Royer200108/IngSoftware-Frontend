@@ -1,6 +1,6 @@
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import { useAuth } from "../context/AuthContext"; // Asegúrate de importar esto
+import { useAuth } from "../context/AuthContext";
 
 import { useNavigate } from "react-router-dom";
 
@@ -11,7 +11,6 @@ function HomePage() {
   const { setUser, setRole } = useAuth(); // 👈
   const pages: string[] = ["/authclient", "/authvisitor", "/reports"];
 
-  // Cerrar sesión de forma asincrónica
   async function cerrarSesion() {
     const response = await fetch("http://localhost:3000/auth/logout", {
       method: "POST",
@@ -25,8 +24,8 @@ function HomePage() {
   // Manejar el logout y redirigir después de cerrar sesión
   async function handleLogout() {
     await cerrarSesion();
-    setUser(null); // 👈 Vaciar el usuario en el contexto
-    setRole(null); // 👈 Vaciar el rol también
+    setUser(null);
+    setRole(null);
     navigate("/login");
   }
 

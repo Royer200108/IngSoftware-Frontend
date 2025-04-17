@@ -43,7 +43,7 @@ function App() {
         <Route path="/signup" element={<SignUp />} />
         <Route path="*" element={<NotFound />} />
 
-        {/* Rutas públicas específicas */}
+        {/* Rutas públicas */}
         <Route path="/authvisitor" element={<AuthVisitor />} />
         <Route path="/registervisitor" element={<RegisterVisitor />} />
 

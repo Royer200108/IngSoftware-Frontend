@@ -1,26 +1,27 @@
-/*
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import FaceRecognition from "../components/FaceRecognition";
+import { useAuth } from "../context/AuthContext";
 
 import { useNavigate } from "react-router-dom";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import Arrow from "../assets/blue_arrow.png";
-
+/*
 interface Props {
   userState: {
     id: string;
     email: string;
   };
 }
-
+*/
 //function HomePage({ token }: Props) {
-function IdentifyVisitor({ userState }: Props) {
+function IdentifyVisitor() {
   const navigate = useNavigate();
   const motivo = useParams();
   console.log("El motivo de visita es: ", motivo.motivo_visita);
+  const { user } = useAuth();
 
   const [identifiedUser, setIdentifiedUser] = useState<{
     id_persona: string;
@@ -37,7 +38,7 @@ function IdentifyVisitor({ userState }: Props) {
   >([]);
   const [identified, setIdenfied] = useState(false);
 
-  const handleUserIdentified = (user: {
+  const handleUserIdentified = (usuario: {
     id_persona: string;
     dni: string;
     nombres: string;
@@ -47,8 +48,8 @@ function IdentifyVisitor({ userState }: Props) {
     motivos_visita: string;
     guardia_uuid: string;
   }) => {
-    setIdentifiedUser(user);
-    console.log("Usuario identificado:", user);
+    setIdentifiedUser(usuario);
+    console.log("Usuario identificado:", usuario);
     setIdenfied(true);
 
     setIdentifiedUser((prevIdentifiedUser) => ({
@@ -59,7 +60,7 @@ function IdentifyVisitor({ userState }: Props) {
       descriptor_facial: prevIdentifiedUser?.descriptor_facial || [],
       fotografia: prevIdentifiedUser?.fotografia || "",
       motivos_visita: motivo.motivo_visita || "",
-      guardia_uuid: userState?.id || "",
+      guardia_uuid: user?.id || "",
     }));
   };
 
@@ -103,16 +104,10 @@ function IdentifyVisitor({ userState }: Props) {
       if (data) {
         setVisitReasons(data);
       }
-      console.log(
-        "La informacion traida desde App: ",
-        userState.id,
-        " ",
-        userState.email
-      );
     };
 
     initialize();
-  }, [userState.email, userState.id]);
+  }, []);
 
   function handleChange(
     event: ChangeEvent<
@@ -217,7 +212,7 @@ function IdentifyVisitor({ userState }: Props) {
                 {/*console.log(
                   "La informacion actual del usuario: ",
                   identifiedUser
-                )}
+                )*/}
                 <form className="flex flex-col  w-3/3 pt-5 items-center">
                   <div className="flex flex-row gap-x-10 w-3/3">
                     <p className="w-1/6">Motivo de visita: </p>
@@ -261,8 +256,8 @@ function IdentifyVisitor({ userState }: Props) {
 }
 
 export default IdentifyVisitor;
-*/
 
+/*
 import { useAuth } from "../context/AuthContext";
 
 function IdentifyVisitor() {
@@ -272,8 +267,8 @@ function IdentifyVisitor() {
     <div>
       <p>Hola, {user?.email}</p>
       <p>Hola, {user?.id}</p>
-      {/* usa user.id o lo que necesites */}
     </div>
   );
 }
 export default IdentifyVisitor;
+*/
