@@ -13,7 +13,7 @@ function IdentifyByAccount() {
   const navigate = useNavigate();
   const motivo = useParams();
   console.log("El motivo de visita es: ", motivo.motivo_visita);
-    
+
   const { user } = useAuth(); // Obtener el usuario desde el contexto
 
   const [identifiedStudent, setIdentifiedStudent] = useState<{
@@ -38,17 +38,16 @@ function IdentifyByAccount() {
 
     if (identifiedStudent) {
       try {
-        
         const formResponse = await fetch(
           "http://localhost:3000/persona/registrarIngreso",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              id_persona: identifiedStudent.id_persona, 
-              motivo_visita: motivo.motivo_visita, 
+              id_persona: identifiedStudent.id_persona,
+              motivo_visita: motivo.motivo_visita,
               metodo_ingreso: "Numero de Cuenta",
-              uuid_usuario: user?.id 
+              uuid_usuario: user?.id,
             }),
           }
         );
@@ -142,7 +141,7 @@ function IdentifyByAccount() {
                   <img
                     src={identifiedStudent.fotografia}
                     alt="Foto del estudiante"
-                    className="w-20 h-20 rounded-full border-2 border-gray-400"
+                    className="rounded-2xl w-3/5"
                   />
                 </div>
 
@@ -183,7 +182,9 @@ function IdentifyByAccount() {
               </div>
             </div>
           ) : (
-            <div>Este usuario no es un estudiante</div>
+            <div className="flex flex-col items-center gap-y-5 m-5">
+              Esperando datos...
+            </div>
           )}
 
           <div className="rounded-sm h-1 bg-gray-400"></div>
