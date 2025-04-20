@@ -38,17 +38,17 @@ function IdentifyByAccount() {
 
     if (identifiedStudent) {
       try {
-        // Asegúrate de que el motivo de visita y el uuid_usuario se estén pasando correctamente
+        
         const formResponse = await fetch(
           "http://localhost:3000/persona/registrarIngreso",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              id_persona: identifiedStudent.id_persona, // Cambiar según tu modelo de datos
-              motivo_visita: motivo.motivo_visita, // Motivo de la visita
+              id_persona: identifiedStudent.id_persona, 
+              motivo_visita: motivo.motivo_visita, 
               metodo_ingreso: "Numero de Cuenta",
-              uuid_usuario: user?.id // Enviamos el uuid del guardia
+              uuid_usuario: user?.id 
             }),
           }
         );
