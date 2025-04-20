@@ -12,6 +12,7 @@ import AuthStudent from "./pages/identifyStudents/AuthStudent";
 import AuthEmployee from "./pages/identifyEmployee/AuthEmployee";
 import IdentifyStudent from "./pages/identifyStudents/IdentifyStudent";
 import IdentifyEmployee from "./pages/identifyEmployee/IdentifyEmployee";
+import IdentifyByAccount from "./pages/identifyStudents/IdentifyByAccount";
 import SignUp from "./pages/SignUp";
 import ReportPage from "./pages/ReportPage";
 import HomePage from "./pages/HomePage";
@@ -23,6 +24,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext"; // 👈
+
 
 function App() {
   const { user, role, isLoading } = useAuth(); // 👈
@@ -125,7 +127,14 @@ function App() {
             </RoleProtectedRoute>
           }
         />
-
+        <Route
+  path="/identifybyaccount/:motivo_visita"
+  element={
+    <RoleProtectedRoute allowedRoles={[2]}>
+      <IdentifyByAccount />
+    </RoleProtectedRoute>
+  }
+/>
         {/* Ruta solo para administradores (rol 1) */}
         <Route
           path="/reports"

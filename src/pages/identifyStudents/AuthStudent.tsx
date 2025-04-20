@@ -54,7 +54,7 @@ function AuthStudent() {
                   <img src={Arrow} alt="" />
                   <div
                     className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md"
-                    onClick={() => handleRoute("/")}
+                    onClick={() => handleRoute(`/identifybyaccount/Estudio`)}
                   >
                     Número de cuenta
                   </div>

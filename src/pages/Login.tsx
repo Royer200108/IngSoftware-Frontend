@@ -39,8 +39,10 @@ function Login() {
 
       const result = await response.json();
 
-      if (!response.ok) throw new Error(result.error);
-
+      if (!response.ok) {
+        console.error("Respuesta fallida del login:", result);
+        throw new Error(result?.error || "Error al iniciar sesión");
+      }
       // Actualizar el contexto con los datos del usuario
       setUser(result.user);
 
