@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import IngresosPorCentro from "../components/IngresosPorCentro";
@@ -55,7 +55,7 @@ function ReportPage() {
         setDataCarrera(carrera);
         setLoading(false);
       })
-      .catch((error) => {
+      .catch((_error) => {
         setError('Error al obtener los datos');
         setLoading(false);
       });
