@@ -6,6 +6,8 @@ import IngresosPorDia from "../components/IngresosPorDia";
 import IngresosPorMetodo from "../components/IngresosPorMetodo";
 import IngresosPorCarrera from "../components/IngresosPorCarrera";
 import Dashboard from "../components/Dashboard";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 type ReportType = 'dashboard' | 'centro' | 'dia' | 'metodo' | 'carrera';
 
@@ -27,6 +29,8 @@ interface IngresoCarrera {
 }
 
 function ReportPage() {
+  const navigate = useNavigate();
+  const { setUser, setRole } = useAuth(); // 👈
   const [selectedReport, setSelectedReport] = useState<ReportType>('dashboard');
   const [dataCentro, setDataCentro] = useState<IngresoCentro[]>([]);
   const [dataDia, setDataDia] = useState<IngresoDia[]>([]);
@@ -56,6 +60,33 @@ function ReportPage() {
         setLoading(false);
       });
   }, []);
+
+  // Función para cerrar sesión
+  async function cerrarSesion() {
+    try {
+      const response = await fetch("http://localhost:3000/auth/logout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al cerrar sesión en el servidor');
+      }
+
+      const data = await response.json();
+      console.log(data.message);
+    } catch (error) {
+      console.error("Error de cierre de sesión:", error);
+    }
+  }
+
+  // Manejar el logout y redirigir después de cerrar sesión
+  async function handleLogout() {
+    await cerrarSesion();  // Cerramos sesión en el servidor
+    setUser(null);          // Limpiamos el contexto de usuario
+    setRole(null);          // Limpiamos el contexto de rol
+    navigate("/login");     // Redirigimos a la página de inicio de sesión
+  }
 
   if (loading) return <div>Cargando...</div>;
   if (error) return <div>{error}</div>;
@@ -104,6 +135,16 @@ function ReportPage() {
         {selectedReport === 'dia' && <IngresosPorDia data={dataDia} />}
         {selectedReport === 'metodo' && <IngresosPorMetodo data={dataMetodo} />}
         {selectedReport === 'carrera' && <IngresosPorCarrera data={dataCarrera} />}
+
+        {/* Botón de cerrar sesión */}
+        <div className="flex justify-center mt-8">
+          <button 
+            className="px-4 py-2 bg-blue-500 text-white rounded-md "
+            onClick={handleLogout}
+          >
+            Cerrar sesión
+          </button>
+        </div>
       </div>
       <Footer />
     </>
