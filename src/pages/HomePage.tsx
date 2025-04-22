@@ -18,9 +18,6 @@ function HomePage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     });
-
-    const data = await response.json();
-    //console.log(data.message);
   }
 
   // Manejar el logout y redirigir después de cerrar sesión
