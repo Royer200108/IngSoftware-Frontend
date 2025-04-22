@@ -65,8 +65,8 @@ function ReportPage() {
         setDataCarrera(carrera);
         setLoading(false);
       })
-      .catch((_error) => {
-        setError("Error al obtener los datos");
+      .catch((error) => {
+        setError(error);
         setLoading(false);
       });
   }, []);
@@ -83,6 +83,7 @@ function ReportPage() {
         throw new Error("Error al cerrar sesión en el servidor");
       }
 
+      await response.json();
       //console.log(data.message);
     } catch (error) {
       console.error("Error de cierre de sesión:", error);
