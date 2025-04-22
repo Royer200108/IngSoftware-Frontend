@@ -28,16 +28,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [role, setRole] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   useEffect(() => {
     async function verificarSesion() {
       try {
-        const res = await fetch("http://localhost:3000/auth/verificarLogin");
+        const res = await fetch(`${API_BASE_URL}/auth/verificarLogin`);
         const data = await res.json();
 
         if (data.isAuthenticated) {
           setUser(data.user);
 
-          const rolRes = await fetch("http://localhost:3000/auth/rol", {
+          const rolRes = await fetch(`${API_BASE_URL}/auth/rol`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ uuid_guardia: data.user.id }),
@@ -57,7 +59,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     verificarSesion();
-  }, []);
+  }, [API_BASE_URL]);
 
   return (
     <AuthContext.Provider value={{ user, role, isLoading, setUser, setRole }}>

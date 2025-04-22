@@ -10,6 +10,9 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import Arrow from "../../assets/blue_arrow.png";
+
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 /*
 interface Props {
   userState: {
@@ -75,7 +78,7 @@ function IdentifyVisitor() {
   async function obtenerMotivos() {
     try {
       const responseMotivosVisita = await fetch(
-        "http://localhost:3000/persona/motivos",
+        `${API_BASE_URL}/persona/motivos`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -139,7 +142,7 @@ function IdentifyVisitor() {
 
     try {
       const formResponse = await fetch(
-        "http://localhost:3000/persona/registrarIngreso",
+        `${API_BASE_URL}/persona/registrarIngreso`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

@@ -2,19 +2,21 @@ import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import SuccessModal from "../../components/SuccessModal";
 
-import { useAuth } from "../../context/AuthContext"; // Importa el contexto
+import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
 
 import Arrow from "../../assets/blue_arrow.png";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function IdentifyByAccount() {
   const navigate = useNavigate();
   const motivo = useParams();
   console.log("El motivo de visita es: ", motivo.motivo_visita);
 
-  const { user } = useAuth(); // Obtener el usuario desde el contexto
+  const { user } = useAuth();
 
   const [identifiedStudent, setIdentifiedStudent] = useState<{
     nombres: string;
@@ -39,7 +41,7 @@ function IdentifyByAccount() {
     if (identifiedStudent) {
       try {
         const formResponse = await fetch(
-          "http://localhost:3000/persona/registrarIngreso",
+          `${API_BASE_URL}/persona/registrarIngreso`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -57,7 +59,7 @@ function IdentifyByAccount() {
         }
 
         console.log("Usuario registrado exitosamente");
-        setShowModal(true); // Mostramos el modal
+        setShowModal(true);
       } catch (error) {
         console.error("Error de autenticación:", error);
       }
@@ -69,7 +71,7 @@ function IdentifyByAccount() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/persona/buscarEstudiante?numeroCuenta=${accountNumber}`,
+        `${API_BASE_URL}/persona/buscarEstudiante?numeroCuenta=${accountNumber}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
@@ -136,7 +138,6 @@ function IdentifyByAccount() {
           {identifiedStudent ? (
             <div className="flex flex-col gap-y-7 items-center pt-5 mb-10">
               <div className="w-6/6">
-                {/* Foto en la parte superior */}
                 <div className="flex flex-row justify-center pt-5">
                   <img
                     src={identifiedStudent.fotografia}
@@ -145,7 +146,6 @@ function IdentifyByAccount() {
                   />
                 </div>
 
-                {/* Datos del estudiante debajo de la foto */}
                 <div className="flex flex-row gap-x-10 w-3/3 pt-5">
                   <p className="w-2/6">Usuario: </p>
                   <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">

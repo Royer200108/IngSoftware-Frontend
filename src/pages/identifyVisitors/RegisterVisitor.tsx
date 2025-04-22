@@ -11,6 +11,8 @@ import FaceDescriptorExtractor from "../../components/FaceDescriptorExtractor";
 
 import Arrow from "../../assets/blue_arrow.png";
 
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function RegisterVisitor() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -134,7 +136,7 @@ function RegisterVisitor() {
         }
       });
 
-      const photoResponse = await fetch("http://localhost:3000/image/upload", {
+      const photoResponse = await fetch(`${API_BASE_URL}/image/upload`, {
         method: "POST",
         body: formDataImage,
       });
@@ -146,7 +148,7 @@ function RegisterVisitor() {
 
       console.log(formData);
       const formResponse = await fetch(
-        "http://localhost:3000/persona/registrar",
+        `${API_BASE_URL}/persona/registrar`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

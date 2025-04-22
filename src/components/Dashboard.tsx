@@ -10,29 +10,31 @@ function Dashboard() {
   const [porTipo, setPorTipo] = useState([]);
   const [porCentro, setPorCentro] = useState([]);
   const [porMetodo, setPorMetodo] = useState([]);
-  const [porCarrera, setPorCarrera] = useState([]); 
+  const [porCarrera, setPorCarrera] = useState([]);
+
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   useEffect(() => {
-    fetch('http://localhost:3000/ingresos/por-dia')
+    fetch(`${API_BASE_URL}/ingresos/por-dia`)
       .then(res => res.json())
       .then(data => setPorDia(data));
 
-    fetch('http://localhost:3000/ingresos/por-tipo')
+    fetch(`${API_BASE_URL}/ingresos/por-tipo`)
       .then(res => res.json())
       .then(data => setPorTipo(data));
 
-    fetch('http://localhost:3000/ingresos/por-centro')
+    fetch(`${API_BASE_URL}/ingresos/por-centro`)
       .then(res => res.json())
       .then(data => setPorCentro(data));
 
-    fetch('http://localhost:3000/ingresos/por-metodo')
+    fetch(`${API_BASE_URL}/ingresos/por-metodo`)
       .then(res => res.json())
       .then(data => setPorMetodo(data));
 
-    fetch('http://localhost:3000/ingresos/por-carrera') 
+    fetch(`${API_BASE_URL}/ingresos/por-carrera`)
       .then(res => res.json())
-      .then(data => setPorCarrera(data)); 
-  }, []);
+      .then(data => setPorCarrera(data));
+  }, [API_BASE_URL]);
 
   return (
     <div className="p-6 grid gap-10 grid-cols-1 md:grid-cols-2">
@@ -56,7 +58,6 @@ function Dashboard() {
         <IngresosPorMetodo data={porMetodo} />
       </div>
 
-      
       <div className="shadow-lg rounded-xl p-4 border">
         <h2 className="text-lg font-semibold mb-2">Ingresos por Carrera</h2>
         <IngresosPorCarrera data={porCarrera} />

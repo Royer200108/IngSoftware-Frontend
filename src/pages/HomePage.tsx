@@ -6,13 +6,15 @@ import { useNavigate } from "react-router-dom";
 
 import Arrow from "../assets/blue_arrow.png";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function HomePage() {
   const navigate = useNavigate();
   const { setUser, setRole } = useAuth(); // 👈
   const pages: string[] = ["/authemployeestudent", "/authvisitor", "/reports"];
 
   async function cerrarSesion() {
-    const response = await fetch("http://localhost:3000/auth/logout", {
+    const response = await fetch(`${API_BASE_URL}/auth/logout`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
     });

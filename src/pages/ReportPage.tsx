@@ -9,6 +9,9 @@ import Dashboard from "../components/Dashboard";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 type ReportType = 'dashboard' | 'centro' | 'dia' | 'metodo' | 'carrera';
 
 interface IngresoCentro {
@@ -42,10 +45,13 @@ function ReportPage() {
   useEffect(() => {
     setLoading(true);
 
-    const fetchCentro = fetch('http://localhost:3000/ingresos/por-centro').then(res => res.json());
-    const fetchDia = fetch('http://localhost:3000/ingresos/por-dia').then(res => res.json());
-    const fetchMetodo = fetch('http://localhost:3000/ingresos/por-metodo').then(res => res.json());
-    const fetchCarrera = fetch('http://localhost:3000/ingresos/por-carrera').then(res => res.json());
+
+
+
+    const fetchCentro = fetch(`${API_BASE_URL}/ingresos/por-centro`).then(res => res.json());
+    const fetchDia = fetch(`${API_BASE_URL}/ingresos/por-dia`).then(res => res.json());
+    const fetchMetodo = fetch(`${API_BASE_URL}/ingresos/por-metodo`).then(res => res.json());
+    const fetchCarrera = fetch(`${API_BASE_URL}/ingresos/por-carrera`).then(res => res.json());
 
     Promise.all([fetchCentro, fetchDia, fetchMetodo, fetchCarrera])
       .then(([centro, dia, metodo, carrera]) => {
@@ -64,7 +70,7 @@ function ReportPage() {
   // Función para cerrar sesión
   async function cerrarSesion() {
     try {
-      const response = await fetch("http://localhost:3000/auth/logout", {
+      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });

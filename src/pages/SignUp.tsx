@@ -9,6 +9,7 @@ import Arrow from "../assets/blue_arrow.png";
 import { useEffect, useState, ChangeEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function SignUp() {
   const [formData, setFormData] = useState({
     identidad: "",
@@ -118,7 +119,7 @@ function SignUp() {
 
   async function obtenerRoles() {
     try {
-      const responseRoles = await fetch("http://localhost:3000/auth/roles", {
+      const responseRoles = await fetch(`${API_BASE_URL}/auth/roles`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -143,7 +144,7 @@ function SignUp() {
 
   async function obtenerCentros() {
     try {
-      const responseRoles = await fetch("http://localhost:3000/auth/centros", {
+      const responseRoles = await fetch(`${API_BASE_URL}/auth/centros`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
       });
@@ -168,7 +169,7 @@ function SignUp() {
 
   async function obtenerAreas(nombre_centro: string) {
     try {
-      const responseRoles = await fetch("http://localhost:3000/auth/areas", {
+      const responseRoles = await fetch(`${API_BASE_URL}/auth/areas`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nombre_centro }),
@@ -235,7 +236,7 @@ function SignUp() {
         }
       });
 
-      const photoResponse = await fetch("http://localhost:3000/image/upload", {
+      const photoResponse = await fetch(`${API_BASE_URL}/image/upload`, {
         method: "POST",
         body: formDataImage,
       });
@@ -244,7 +245,8 @@ function SignUp() {
       console.log("URL de la imagen:", finalPhotoResponse.imageUrl);
 
       formData.foto = finalPhotoResponse.imageUrl;
-      const response = await fetch("http://localhost:3000/auth/signup", {
+      
+      const response = await fetch(`${API_BASE_URL}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),

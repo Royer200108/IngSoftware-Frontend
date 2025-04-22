@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from "react";
 import * as faceapi from "face-api.js";
-//import supabase from "../supabase/client";
 
 interface User {
   id_persona: string;
@@ -28,21 +27,20 @@ const FaceRecognition: React.FC<FaceRecognitionSystemProps> = ({
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [shouldDetect, setShouldDetect] = useState<boolean>(true);
 
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
   async function obtenerPersonas() {
     try {
       const responsePersonas = await fetch(
-        "http://localhost:3000/persona/obtener",
+        `${API_BASE_URL}/persona/obtener`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         }
       );
 
-      //console.log("Estado de la respuesta:", responsePersonas.status); // Imprime el código de estado HTTP
-      //console.log("Headers de la respuesta:", responsePersonas.headers);
-
       if (!responsePersonas.ok) {
-        const errorText = await responsePersonas.text(); // Captura el mensaje de error del servidor
+        const errorText = await responsePersonas.text();
         console.error(
           "Error al obtener las personas:",
           responsePersonas.status,
@@ -52,7 +50,6 @@ const FaceRecognition: React.FC<FaceRecognitionSystemProps> = ({
       }
 
       const data = await responsePersonas.json();
-      //console.log("Datos recibidos:", data);
       return data;
     } catch (error) {
       console.error("Error en la petición:", error);
@@ -62,7 +59,6 @@ const FaceRecognition: React.FC<FaceRecognitionSystemProps> = ({
   useEffect(() => {
     const initialize = async () => {
       const data = await obtenerPersonas();
-      //console.log("La data obtenida es: ", data);
       try {
         await Promise.all([
           faceapi.nets.ssdMobilenetv1.loadFromUri("/models"),
@@ -141,7 +137,7 @@ const FaceRecognition: React.FC<FaceRecognitionSystemProps> = ({
         if (user && (!currentUser || user.dni !== currentUser.dni)) {
           setCurrentUser(user);
           setShouldDetect(false);
-          onUserIdentified(user); // Enviar datos al componente padre
+          onUserIdentified(user);
         }
       }
     };

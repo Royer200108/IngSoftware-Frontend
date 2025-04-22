@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 
 import Arrow from "../../assets/blue_arrow.png";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 /*
 interface Props {
   userState: {
@@ -86,7 +87,7 @@ function IdentifyStudent() {
   async function verificarEstudiante(id_persona: string) {
     try {
       const Response = await fetch(
-        "http://localhost:3000/persona/verificarEstudiante",
+        `${API_BASE_URL}/persona/verificarEstudiante`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -115,7 +116,7 @@ function IdentifyStudent() {
 
     try {
       const formResponse = await fetch(
-        "http://localhost:3000/persona/registrarIngreso",
+        `${API_BASE_URL}/persona/registrarIngreso`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

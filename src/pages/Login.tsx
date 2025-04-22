@@ -5,6 +5,9 @@ import { useAuth } from "../context/AuthContext"; // Importar el contexto
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+console.log("URL de la API:", API_BASE_URL);
+
 function Login() {
   const navigate = useNavigate();
   const { setUser, setRole, user, role } = useAuth(); // Usamos el contexto
@@ -29,30 +32,39 @@ function Login() {
   // Función para realizar el login
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-
+  
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
-
-      const result = await response.json();
-
+  
+      const text = await response.text();  // Leemos la respuesta como texto
+      console.log('Respuesta:', text);  // Puedes ver lo que llega del backend
+  
       if (!response.ok) {
-        console.error("Respuesta fallida del login:", result);
-        throw new Error(result?.error || "Error al iniciar sesión");
+        console.error("Respuesta fallida del login:", text);
+        throw new Error(text || "Error al iniciar sesión");
       }
+  
+      let result;
+      try {
+        result = JSON.parse(text);  // Intentamos convertir el texto a JSON
+      } catch (error) {
+        throw new Error("No se pudo parsear la respuesta del servidor.");
+      }
+  
       // Actualizar el contexto con los datos del usuario
       setUser(result.user);
-
+  
       // Obtener el rol del usuario
-      const rolResponse = await fetch("http://localhost:3000/auth/rol", {
+      const rolResponse = await fetch(`${API_BASE_URL}/auth/rol`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ uuid_guardia: result.user.id }),
       });
-
+  
       const rolData = await rolResponse.json();
       const rolId = rolData[0]?.id_rol;
       setRole(rolId); // Guardamos el rol en el contexto
@@ -60,6 +72,7 @@ function Login() {
       console.error("Error de autenticación:", error);
     }
   }
+  
 
   // Redirección si ya hay sesión activa
   useEffect(() => {

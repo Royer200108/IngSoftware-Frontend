@@ -11,15 +11,8 @@ import { useParams } from "react-router-dom";
 
 import Arrow from "../../assets/blue_arrow.png";
 
-/*
-interface Props {
-  userState: {
-    id: string;
-    email: string;
-  };
-}
-*/
-//function HomePage({ token }: Props) {
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 function IdentifyEmployee() {
   const navigate = useNavigate();
   const motivo = useParams();
@@ -36,6 +29,7 @@ function IdentifyEmployee() {
     motivos_visita: string;
     guardia_uuid: string;
   } | null>(null);
+
   const [identifiedEmployee, setIdentifiedEmployee] = useState<{
     numero_empleado: string;
     puesto: string;
@@ -73,7 +67,7 @@ function IdentifyEmployee() {
 
     const estudiante = await verificarEstudiante(usuario.id_persona);
     if (estudiante) {
-      setIdentifiedEmployee(estudiante); // ya que estás retornando `data` completo
+      setIdentifiedEmployee(estudiante);
       console.log("AQUI DEBERIA ESTAR LLENO ", estudiante);
     }
   };
@@ -84,20 +78,16 @@ function IdentifyEmployee() {
 
   async function verificarEstudiante(id_persona: string) {
     try {
-      const Response = await fetch(
-        "http://localhost:3000/persona/verificarEmpleado",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id_persona: id_persona,
-          }),
-        }
-      );
+      const Response = await fetch(`${API_BASE_URL}/persona/verificarEmpleado`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id_persona }),
+      });
 
       if (!Response.ok) {
         throw new Error("Error en el registro");
       }
+
       const data = await Response.json();
       console.log("LA DATA OBTENIDA DEL Empleado ", data[0]);
       setIdentifiedEmployee(data[0]);
@@ -108,31 +98,27 @@ function IdentifyEmployee() {
     }
   }
 
-  //Envia la información obtenida
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     try {
-      const formResponse = await fetch(
-        "http://localhost:3000/persona/registrarIngreso",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            id_persona: identifiedUser?.id_persona,
-            motivo_visita: identifiedUser?.motivos_visita,
-            metodo_ingreso: "Reconocimiento Facial",
-            uuid_usuario: identifiedUser?.guardia_uuid,
-          }),
-        }
-      );
+      const formResponse = await fetch(`${API_BASE_URL}/persona/registrarIngreso`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id_persona: identifiedUser?.id_persona,
+          motivo_visita: identifiedUser?.motivos_visita,
+          metodo_ingreso: "Reconocimiento Facial",
+          uuid_usuario: identifiedUser?.guardia_uuid,
+        }),
+      });
 
       if (!formResponse.ok) {
         throw new Error("Error en el registro");
       }
 
       console.log("Usuario registrado exitosamente");
-      setShowModal(true); // Mostramos el modal
+      setShowModal(true);
     } catch (error) {
       console.error("Error de autenticación:", error);
     }
@@ -159,13 +145,11 @@ function IdentifyEmployee() {
 
             <div className="flex flex-col items-center gap-y-5">
               {identified ? (
-                <>
-                  <img
-                    src={identifiedUser?.fotografia}
-                    alt="Fotografía del usuario"
-                    className="rounded-2xl w-3/5"
-                  />
-                </>
+                <img
+                  src={identifiedUser?.fotografia}
+                  alt="Fotografía del usuario"
+                  className="rounded-2xl w-3/5"
+                />
               ) : (
                 <FaceRecognition onUserIdentified={handleUserIdentified} />
               )}
@@ -195,7 +179,7 @@ function IdentifyEmployee() {
                     </p>
                   </div>
 
-                  <form className="flex flex-col  w-3/3 p-2 mt-2 items-center border-1 rounded-sm">
+                  <form className="flex flex-col w-3/3 p-2 mt-2 items-center border-1 rounded-sm">
                     <p className="text-1xl w-5/6">Datos del empleado: </p>
                     <div className="flex flex-row gap-x-10 w-3/3 pt-5">
                       <p className="w-2/6">Numero empleado: </p>
