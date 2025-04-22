@@ -14,7 +14,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function IdentifyByAccount() {
   const navigate = useNavigate();
   const motivo = useParams();
-  console.log("El motivo de visita es: ", motivo.motivo_visita);
+  //console.log("El motivo de visita es: ", motivo.motivo_visita);
 
   const { user } = useAuth();
 
@@ -58,7 +58,7 @@ function IdentifyByAccount() {
           throw new Error("Error en el registro");
         }
 
-        console.log("Usuario registrado exitosamente");
+        //console.log("Usuario registrado exitosamente");
         setShowModal(true);
       } catch (error) {
         console.error("Error de autenticación:", error);
@@ -67,7 +67,7 @@ function IdentifyByAccount() {
   };
 
   const verifyAccountNumber = async (accountNumber: string) => {
-    console.log("Número de cuenta a enviar:", accountNumber);
+    //console.log("Número de cuenta a enviar:", accountNumber);
 
     try {
       const response = await fetch(
@@ -84,7 +84,7 @@ function IdentifyByAccount() {
       }
 
       const data = await response.json();
-      console.log("Datos del estudiante:", data[0]);
+      //console.log("Datos del estudiante:", data[0]);
       setIdentifiedStudent(data[0]);
     } catch (error) {
       console.error("Error al verificar número de cuenta:", error);

@@ -16,7 +16,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function IdentifyEmployee() {
   const navigate = useNavigate();
   const motivo = useParams();
-  console.log("El motivo de visita es: ", motivo.motivo_visita);
+  //console.log("El motivo de visita es: ", motivo.motivo_visita);
   const { user } = useAuth();
 
   const [identifiedUser, setIdentifiedUser] = useState<{
@@ -63,12 +63,12 @@ function IdentifyEmployee() {
       guardia_uuid: user?.id || "",
     }));
 
-    console.log("EL ID DE LA PERSONA A BUSCAR ES: ", usuario.id_persona);
+    //console.log("EL ID DE LA PERSONA A BUSCAR ES: ", usuario.id_persona);
 
     const estudiante = await verificarEstudiante(usuario.id_persona);
     if (estudiante) {
       setIdentifiedEmployee(estudiante);
-      console.log("AQUI DEBERIA ESTAR LLENO ", estudiante);
+      //console.log("AQUI DEBERIA ESTAR LLENO ", estudiante);
     }
   };
 
@@ -89,9 +89,9 @@ function IdentifyEmployee() {
       }
 
       const data = await Response.json();
-      console.log("LA DATA OBTENIDA DEL Empleado ", data[0]);
+      //console.log("LA DATA OBTENIDA DEL Empleado ", data[0]);
       setIdentifiedEmployee(data[0]);
-      console.log("contenido de identifiedStudent: ", identifiedEmployee);
+      //console.log("contenido de identifiedStudent: ", identifiedEmployee);
       return data[0];
     } catch (error) {
       console.error("Error de autenticación:", error);
@@ -117,7 +117,7 @@ function IdentifyEmployee() {
         throw new Error("Error en el registro");
       }
 
-      console.log("Usuario registrado exitosamente");
+      //console.log("Usuario registrado exitosamente");
       setShowModal(true);
     } catch (error) {
       console.error("Error de autenticación:", error);

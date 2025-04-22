@@ -64,7 +64,7 @@ function SignUp() {
   };
 
   const handlePhotoCapture = (photoData: string) => {
-    console.log("Foto recibida del hijo:", photoData);
+    //console.log("Foto recibida del hijo:", photoData);
 
     // Generar nombre de archivo basado en los datos del formulario
     const generateFileName = () => {
@@ -109,7 +109,7 @@ function SignUp() {
       setEmailError(validateEmail(value) ? "" : "Correo electrónico no válido");
     }
 
-    console.log("FORMATEADO:", formData);
+    //console.log("FORMATEADO:", formData);
   }
 
   function handleRoute(url: string) {
@@ -135,7 +135,7 @@ function SignUp() {
       }
 
       const data = await responseRoles.json();
-      console.log("Los roles recibidos:", data);
+      //console.log("Los roles recibidos:", data);
       return data;
     } catch (error) {
       console.error("Error en la petición:", error);
@@ -160,7 +160,7 @@ function SignUp() {
       }
 
       const data = await responseRoles.json();
-      console.log("Los centros recibidos:", data);
+      //console.log("Los centros recibidos:", data);
       return data;
     } catch (error) {
       console.error("Error en la petición:", error);
@@ -186,7 +186,7 @@ function SignUp() {
       }
 
       const data = await responseRoles.json();
-      console.log("Las areas recibidos:", data);
+      //console.log("Las areas recibidos:", data);
       setAreas(data);
       return data;
     } catch (error) {
@@ -212,7 +212,7 @@ function SignUp() {
     e.preventDefault();
 
     setFormData;
-    console.log("La data enviada es: ", formData);
+    //console.log("La data enviada es: ", formData);
     try {
       const base64ToBlob = async (base64: string) => {
         const response = await fetch(base64);
@@ -242,7 +242,7 @@ function SignUp() {
       });
 
       const finalPhotoResponse = await photoResponse.json();
-      console.log("URL de la imagen:", finalPhotoResponse.imageUrl);
+      //console.log("URL de la imagen:", finalPhotoResponse.imageUrl);
 
       formData.foto = finalPhotoResponse.imageUrl;
       
@@ -256,7 +256,7 @@ function SignUp() {
         throw new Error("Error en el registro");
       }
 
-      console.log("Usuario registrado exitosamente");
+      //console.log("Usuario registrado exitosamente");
       navigate("/login", { replace: true });
     } catch (error) {
       console.error("Error de autenticación:", error);

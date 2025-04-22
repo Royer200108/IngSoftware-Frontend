@@ -80,7 +80,7 @@ function ReportPage() {
       }
 
       const data = await response.json();
-      console.log(data.message);
+      //console.log(data.message);
     } catch (error) {
       console.error("Error de cierre de sesión:", error);
     }

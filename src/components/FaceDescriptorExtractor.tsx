@@ -39,7 +39,7 @@ const FaceDescriptorExtractor = ({
           .withFaceDescriptor();
 
         onDescriptorReady(detection ? Array.from(detection.descriptor) : null);
-        console.log("Este es el decriptor: ", detection?.descriptor);
+        //console.log("Este es el decriptor: ", detection?.descriptor);
       } catch (error) {
         console.error("Error al procesar:", error);
         onDescriptorReady(null);

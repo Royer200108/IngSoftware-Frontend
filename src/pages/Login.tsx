@@ -6,7 +6,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-console.log("URL de la API:", API_BASE_URL);
+//console.log("URL de la API:", API_BASE_URL);
 
 function Login() {
   const navigate = useNavigate();
@@ -41,7 +41,7 @@ function Login() {
       });
   
       const text = await response.text();  // Leemos la respuesta como texto
-      console.log('Respuesta:', text);  // Puedes ver lo que llega del backend
+      //console.log('Respuesta:', text);  // Puedes ver lo que llega del backend
   
       if (!response.ok) {
         console.error("Respuesta fallida del login:", text);

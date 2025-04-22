@@ -24,7 +24,7 @@ interface Props {
 function IdentifyStudent() {
   const navigate = useNavigate();
   const motivo = useParams();
-  console.log("El motivo de visita es: ", motivo.motivo_visita);
+  //console.log("El motivo de visita es: ", motivo.motivo_visita);
   const { user } = useAuth();
 
   const [identifiedUser, setIdentifiedUser] = useState<{
@@ -71,12 +71,12 @@ function IdentifyStudent() {
       guardia_uuid: user?.id || "",
     }));
 
-    console.log("EL ID DE LA PERSONA A BUSCAR ES: ", usuario.id_persona);
+    //console.log("EL ID DE LA PERSONA A BUSCAR ES: ", usuario.id_persona);
 
     const estudiante = await verificarEstudiante(usuario.id_persona);
     if (estudiante) {
       setIdentifiedStudent(estudiante); // ya que estás retornando `data` completo
-      console.log("AQUI DEBERIA ESTAR LLENO ", estudiante);
+      //console.log("AQUI DEBERIA ESTAR LLENO ", estudiante);
     }
   };
 
@@ -101,9 +101,9 @@ function IdentifyStudent() {
         throw new Error("Error en el registro");
       }
       const data = await Response.json();
-      console.log("LA DATA OBTENIDA DEL ESTUDIANTE ", data[0]);
+      //console.log("LA DATA OBTENIDA DEL ESTUDIANTE ", data[0]);
       setIdentifiedStudent(data[0]);
-      console.log("contenido de identifiedStudent: ", identifiedStudent);
+      //console.log("contenido de identifiedStudent: ", identifiedStudent);
       return data[0];
     } catch (error) {
       console.error("Error de autenticación:", error);
@@ -133,7 +133,7 @@ function IdentifyStudent() {
         throw new Error("Error en el registro");
       }
 
-      console.log("Usuario registrado exitosamente");
+      //console.log("Usuario registrado exitosamente");
       setShowModal(true); // Mostramos el modal
     } catch (error) {
       console.error("Error de autenticación:", error);

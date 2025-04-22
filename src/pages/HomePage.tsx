@@ -20,7 +20,7 @@ function HomePage() {
     });
 
     const data = await response.json();
-    console.log(data.message);
+    //console.log(data.message);
   }
 
   // Manejar el logout y redirigir después de cerrar sesión

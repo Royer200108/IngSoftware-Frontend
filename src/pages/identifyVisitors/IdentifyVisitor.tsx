@@ -25,7 +25,7 @@ interface Props {
 function IdentifyVisitor() {
   const navigate = useNavigate();
   const motivo = useParams();
-  console.log("El motivo de visita es: ", motivo.motivo_visita);
+  //console.log("El motivo de visita es: ", motivo.motivo_visita);
   const { user } = useAuth();
 
   const [identifiedUser, setIdentifiedUser] = useState<{
@@ -55,7 +55,7 @@ function IdentifyVisitor() {
     guardia_uuid: string;
   }) => {
     setIdentifiedUser(usuario);
-    console.log("Usuario identificado:", usuario);
+    //console.log("Usuario identificado:", usuario);
     setIdenfied(true);
 
     setIdentifiedUser((prevIdentifiedUser) => ({
@@ -96,17 +96,17 @@ function IdentifyVisitor() {
       }
 
       const data = await responseMotivosVisita.json();
-      console.log("Los motivos recibidos:", data);
+      //console.log("Los motivos recibidos:", data);
       return data;
     } catch (error) {
-      console.error("Error en la petición:", error);
+      //console.error("Error en la petición:", error);
     }
   }
 
   useEffect(() => {
     const initialize = async () => {
       const data = await obtenerMotivos();
-      console.log("Los motivos de visita: ", data);
+      //console.log("Los motivos de visita: ", data);
       if (data) {
         setVisitReasons(data);
       }
@@ -133,7 +133,7 @@ function IdentifyVisitor() {
       guardia_uuid: prevIdentifiedUser?.guardia_uuid || "",
       [name]: value,
     }));
-    console.log("La informacion del usuario: ", identifiedUser);
+    //console.log("La informacion del usuario: ", identifiedUser);
   }
 
   //Envia la información obtenida
@@ -159,7 +159,7 @@ function IdentifyVisitor() {
         throw new Error("Error en el registro");
       }
 
-      console.log("Usuario registrado exitosamente");
+      //console.log("Usuario registrado exitosamente");
       setShowModal(true); // Mostramos el modal
     } catch (error) {
       console.error("Error de autenticación:", error);

@@ -35,7 +35,7 @@ function RegisterVisitor() {
   };
 
   const handlePhotoCapture = (photoData: string) => {
-    console.log("Foto recibida del hijo:", photoData);
+    //console.log("Foto recibida del hijo:", photoData);
 
     // Generar nombre de archivo basado en los datos del formulario
     const generateFileName = () => {
@@ -106,7 +106,7 @@ function RegisterVisitor() {
       );
     }
 
-    console.log("FORMATEADO:", formData);
+    //console.log("FORMATEADO:", formData);
   }
 
   //Envia la información obtenida
@@ -142,11 +142,11 @@ function RegisterVisitor() {
       });
 
       const finalPhotoResponse = await photoResponse.json();
-      console.log("URL de la imagen:", finalPhotoResponse.imageUrl);
+      //console.log("URL de la imagen:", finalPhotoResponse.imageUrl);
 
       formData.foto = finalPhotoResponse.imageUrl;
 
-      console.log(formData);
+      //console.log(formData);
       const formResponse = await fetch(
         `${API_BASE_URL}/persona/registrar`,
         {
@@ -160,7 +160,7 @@ function RegisterVisitor() {
         throw new Error("Error en el registro");
       }
 
-      console.log("Usuario registrado exitosamente");
+      //console.log("Usuario registrado exitosamente");
       navigate("/identifyvisitor");
     } catch (error) {
       console.error("Error de autenticación:", error);
