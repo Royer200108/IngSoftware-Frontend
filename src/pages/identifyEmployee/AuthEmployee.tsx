@@ -54,9 +54,9 @@ function AuthEmployee() {
                   <img src={Arrow} alt="" />
                   <div
                     className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md"
-                    onClick={() => handleRoute("/")}
+                    onClick={() => handleRoute(`/IdentifyByEmployeeNumber/Trabajo`)}
                   >
-                    Número de cuenta
+                    Numero de Empleado
                   </div>
                 </div>
               </div>

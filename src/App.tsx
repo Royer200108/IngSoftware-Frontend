@@ -13,6 +13,7 @@ import AuthEmployee from "./pages/identifyEmployee/AuthEmployee";
 import IdentifyStudent from "./pages/identifyStudents/IdentifyStudent";
 import IdentifyEmployee from "./pages/identifyEmployee/IdentifyEmployee";
 import IdentifyByAccount from "./pages/identifyStudents/IdentifyByAccount";
+import IdentifyByEmployeeNumber from "./pages/identifyEmployee/IdentifyByEmployeeNumber";
 import SignUp from "./pages/SignUp";
 import ReportPage from "./pages/ReportPage";
 import HomePage from "./pages/HomePage";
@@ -25,6 +26,7 @@ import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
 import HomePageAdmin from "./pages/HomePageAdmin";
+
 
 function App() {
   return (
@@ -139,6 +141,14 @@ function AppRouter() {
         element={
           <RoleProtectedRoute allowedRoles={[2]}>
             <IdentifyEmployee />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/IdentifyByEmployeeNumber/:motivo_visita"
+        element={
+          <RoleProtectedRoute allowedRoles={[2]}>
+            <IdentifyByEmployeeNumber />
           </RoleProtectedRoute>
         }
       />
