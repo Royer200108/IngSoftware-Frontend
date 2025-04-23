@@ -10,7 +10,7 @@ import Arrow from "../assets/blue_arrow.png";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
-function HomePage() {
+function HomePageAdmin() {
   const navigate = useNavigate();
   const { user, setUser, setRole } = useAuth();
   const [guardia, setGuardia] = useState<{
@@ -18,12 +18,7 @@ function HomePage() {
     correo: string;
     nombre_rol: string;
   } | null>(null);
-  const pages: string[] = [
-    "/authemployeestudent",
-    "/authvisitor",
-    "/reports",
-    "/registervisitor",
-  ];
+  const pages: string[] = ["/signup", "/reports"];
 
   async function cerrarSesion() {
     const response = await fetch(`${API_BASE_URL}/auth/logout`, {
@@ -111,7 +106,7 @@ function HomePage() {
                 >
                   <img src={Arrow} alt="" />
                   <div className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md">
-                    Identificar empleado o estudiante
+                    Crear un nuevo usuario del sistema
                   </div>
                 </div>
                 <div
@@ -120,7 +115,7 @@ function HomePage() {
                 >
                   <img src={Arrow} alt="" />
                   <div className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md">
-                    Identificar visitante
+                    Ver reportes
                   </div>
                 </div>
               </div>
@@ -146,4 +141,4 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+export default HomePageAdmin;

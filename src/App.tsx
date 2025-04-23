@@ -24,9 +24,19 @@ import { AuthProvider } from "./context/AuthContext";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext"; // 👈
-
+import HomePageAdmin from "./pages/HomePageAdmin";
 
 function App() {
+  return (
+    <AuthProvider>
+      <AppRouter></AppRouter>
+    </AuthProvider>
+  );
+}
+
+export default App;
+
+function AppRouter() {
   const { user, role, isLoading } = useAuth(); // 👈
   const navigate = useNavigate();
   const location = useLocation();
@@ -34,119 +44,135 @@ function App() {
   useEffect(() => {
     if (isLoading) return;
 
+    // Solo redirige si estamos en login y el usuario está autenticado
     if (user && role !== null && location.pathname === "/login") {
-      if (role === 1) navigate("/reports");
-      else if (role === 2) navigate("/");
+      navigate(role === 1 ? "/homepageadmin" : "/", { replace: true });
+    }
+
+    // Si no hay usuario y no estamos en login, redirige a login
+    if (!user && role === null && location.pathname !== "/login") {
+      navigate("/login", { replace: true });
     }
   }, [user, role, isLoading, location.pathname, navigate]);
 
   if (isLoading) return <div>Cargando...</div>;
 
   return (
-    <AuthProvider>
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="*" element={<NotFound />} />
+    <Routes>
+      {/* Rutas públicas */}
+      <Route path="/login" element={<Login />} />
+      <Route path="*" element={<NotFound />} />
 
-        {/* Rutas públicas */}
+      {/* Ruta solo para usuarios normales (rol 2) */}
 
-        {/* Ruta solo para usuarios normales (rol 2) */}
-
-        <Route
-          path="/"
-          element={
-            <RoleProtectedRoute allowedRoles={[2]}>
-              <HomePage />
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-          path="/authemployeestudent"
-          element={
-            <RoleProtectedRoute allowedRoles={[2]}>
-              <AuthEmployeeStudent />
-            </RoleProtectedRoute>
-          }
-        />
-        {
-          <Route
-            path="/identifyvisitor/:motivo_visita"
-            element={
-              <RoleProtectedRoute allowedRoles={[2]}>
-                <IdentifyVisitor />
-              </RoleProtectedRoute>
-            }
-          />
+      <Route
+        path="/"
+        element={
+          <RoleProtectedRoute allowedRoles={[2]}>
+            <HomePage />
+          </RoleProtectedRoute>
         }
+      />
+
+      <Route
+        path="/authemployeestudent"
+        element={
+          <RoleProtectedRoute allowedRoles={[2]}>
+            <AuthEmployeeStudent />
+          </RoleProtectedRoute>
+        }
+      />
+      {
         <Route
-          path="/authvisitor"
+          path="/identifyvisitor/:motivo_visita"
           element={
             <RoleProtectedRoute allowedRoles={[2]}>
-              <AuthVisitor />
+              <IdentifyVisitor />
             </RoleProtectedRoute>
           }
         />
-        <Route
-          path="/registervisitor"
-          element={
-            <RoleProtectedRoute allowedRoles={[2]}>
-              <RegisterVisitor />
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-          path="/authstudent"
-          element={
-            <RoleProtectedRoute allowedRoles={[2]}>
-              <AuthStudent />
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-          path="/identifystudent/:motivo_visita"
-          element={
-            <RoleProtectedRoute allowedRoles={[2]}>
-              <IdentifyStudent />
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-          path="/authemployee"
-          element={
-            <RoleProtectedRoute allowedRoles={[2]}>
-              <AuthEmployee />
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-          path="/identifyemployee/:motivo_visita"
-          element={
-            <RoleProtectedRoute allowedRoles={[2]}>
-              <IdentifyEmployee />
-            </RoleProtectedRoute>
-          }
-        />
-        <Route
-  path="/identifybyaccount/:motivo_visita"
-  element={
-    <RoleProtectedRoute allowedRoles={[2]}>
-      <IdentifyByAccount />
-    </RoleProtectedRoute>
-  }
-/>
-        {/* Ruta solo para administradores (rol 1) */}
-        <Route
-          path="/reports"
-          element={
-            <RoleProtectedRoute allowedRoles={[1]}>
-              <ReportPage />
-            </RoleProtectedRoute>
-          }
-        />
-      </Routes>
-    </AuthProvider>
+      }
+      <Route
+        path="/authvisitor"
+        element={
+          <RoleProtectedRoute allowedRoles={[2]}>
+            <AuthVisitor />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/registervisitor"
+        element={
+          <RoleProtectedRoute allowedRoles={[2]}>
+            <RegisterVisitor />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/authstudent"
+        element={
+          <RoleProtectedRoute allowedRoles={[2]}>
+            <AuthStudent />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/identifystudent/:motivo_visita"
+        element={
+          <RoleProtectedRoute allowedRoles={[2]}>
+            <IdentifyStudent />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/authemployee"
+        element={
+          <RoleProtectedRoute allowedRoles={[2]}>
+            <AuthEmployee />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/identifyemployee/:motivo_visita"
+        element={
+          <RoleProtectedRoute allowedRoles={[2]}>
+            <IdentifyEmployee />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/identifybyaccount/:motivo_visita"
+        element={
+          <RoleProtectedRoute allowedRoles={[2]}>
+            <IdentifyByAccount />
+          </RoleProtectedRoute>
+        }
+      />
+      {/* Ruta solo para administradores (rol 1) */}
+      <Route
+        path="/homepageadmin"
+        element={
+          <RoleProtectedRoute allowedRoles={[1]}>
+            <HomePageAdmin />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/reports"
+        element={
+          <RoleProtectedRoute allowedRoles={[1]}>
+            <ReportPage />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/signup"
+        element={
+          <RoleProtectedRoute allowedRoles={[1]}>
+            <SignUp />
+          </RoleProtectedRoute>
+        }
+      />
+    </Routes>
   );
 }
-
-export default App;
