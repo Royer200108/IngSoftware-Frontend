@@ -14,9 +14,16 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function IdentifyByAccount() {
   const navigate = useNavigate();
   const motivo = useParams();
-  //console.log("El motivo de visita es: ", motivo.motivo_visita);
-
   const { user } = useAuth();
+
+  const [identifiedUser, setIdentifiedUser] = useState<{
+    id_persona: string;
+    dni: string;
+    nombres: string;
+    apellidos: string;
+    fotografia: string;
+    motivos_visita: string;
+  } | null>(null);
 
   const [identifiedStudent, setIdentifiedStudent] = useState<{
     nombres: string;
@@ -26,6 +33,7 @@ function IdentifyByAccount() {
     centro_regional: string;
     fotografia: string;
     id_persona: string;
+    estado: string;
   } | null>(null);
 
   const [showModal, setShowModal] = useState(false);
@@ -58,7 +66,6 @@ function IdentifyByAccount() {
           throw new Error("Error en el registro");
         }
 
-        //console.log("Usuario registrado exitosamente");
         setShowModal(true);
       } catch (error) {
         console.error("Error de autenticación:", error);
@@ -67,8 +74,6 @@ function IdentifyByAccount() {
   };
 
   const verifyAccountNumber = async (accountNumber: string) => {
-    //console.log("Número de cuenta a enviar:", accountNumber);
-
     try {
       const response = await fetch(
         `${API_BASE_URL}/persona/buscarEstudiante?numeroCuenta=${accountNumber}`,
@@ -84,8 +89,21 @@ function IdentifyByAccount() {
       }
 
       const data = await response.json();
-      //console.log("Datos del estudiante:", data[0]);
-      setIdentifiedStudent(data[0]);
+      
+      if (data[0]) {
+        const studentData = data[0];
+
+        // Actualizamos identifiedStudent y identifiedUser con los datos del estudiante
+        setIdentifiedStudent(studentData);
+        setIdentifiedUser({
+          id_persona: studentData.id_persona,
+          dni: studentData.dni || "", // Asegurándonos de que 'dni' sea parte de la respuesta de la API
+          nombres: studentData.nombres,
+          apellidos: studentData.apellidos,
+          fotografia: studentData.fotografia,
+          motivos_visita: motivo.motivo_visita || "",
+        });
+      }
     } catch (error) {
       console.error("Error al verificar número de cuenta:", error);
     }
@@ -127,7 +145,8 @@ function IdentifyByAccount() {
                 />
                 <button
                   type="submit"
-                  className="rounded-sm bg-[#003B74] p-2 pl-5 pr-5 mt-5 hover:bg-[#003274] text-white cursor-pointer"
+                  disabled={!accountNumber}
+                  className="rounded-sm bg-[#003B74] p-2 pl-5 pr-5 mt-5 hover:bg-[#003274] text-white cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Verificar
                 </button>
@@ -135,56 +154,73 @@ function IdentifyByAccount() {
             </div>
           </div>
 
-          {identifiedStudent ? (
-            <div className="flex flex-col gap-y-7 items-center pt-5 mb-10">
-              <div className="w-6/6">
-                <div className="flex flex-row justify-center pt-5">
+          {identifiedStudent && identifiedUser ? (
+            <div className=" w-6/6">
+              <div className="flex flex-row justify-center pt-5">
                   <img
                     src={identifiedStudent.fotografia}
                     alt="Foto del estudiante"
                     className="rounded-2xl w-3/5"
                   />
                 </div>
+              <div className="flex flex-row gap-x-10 w-3/3 pt-5">
+                <p className="w-2/6">Usuario: </p>
+                <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">
+                  {identifiedUser.nombres} {identifiedUser.apellidos}
+                </p>
+              </div>
+              <div className="flex flex-row gap-x-10 w-3/3 pt-5">
+                <p className="w-2/6">Identidad:</p>
+                <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">
+                  {identifiedUser.dni}
+                </p>
+              </div>
+              <div className="flex flex-row gap-x-10 w-3/3 pt-5">
+                <p className="w-2/6">Motivo de visita: </p>
+                <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">
+                  {identifiedUser.motivos_visita}
+                </p>
+              </div>
 
+              <form className="flex flex-col w-3/3 p-2 mt-2 items-center border-1 rounded-sm">
+                <p className="text-1xl w-5/6">Datos del estudiante: </p>
                 <div className="flex flex-row gap-x-10 w-3/3 pt-5">
-                  <p className="w-2/6">Usuario: </p>
-                  <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">
-                    {identifiedStudent.nombres} {identifiedStudent.apellidos}
-                  </p>
-                </div>
-                <div className="flex flex-row gap-x-10 w-3/3 pt-5">
-                  <p className="w-2/6">Cuenta:</p>
+                  <p className="w-2/6">Cuenta: </p>
                   <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">
                     {identifiedStudent.numero_cuenta}
                   </p>
                 </div>
                 <div className="flex flex-row gap-x-10 w-3/3 pt-5">
-                  <p className="w-2/6">Carrera:</p>
+                  <p className="w-2/6">Carrera: </p>
                   <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">
                     {identifiedStudent.nombre_carrera}
                   </p>
                 </div>
                 <div className="flex flex-row gap-x-10 w-3/3 pt-5">
-                  <p className="w-2/6">Centro Regional:</p>
+                  <p className="w-2/6">Centro regional: </p>
                   <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">
                     {identifiedStudent.centro_regional}
                   </p>
                 </div>
-
-                <div className="flex flex-col gap-x-10 w-6/6 p-2 items-center">
-                  <button
-                    className="rounded-sm bg-[#003B74] p-1 pl-5 pr-5 mt-5 hover:bg-[#003274] text-white cursor-pointer"
-                    onClick={handleSubmit}
-                  >
-                    Registrar visita
-                  </button>
+                <div className="flex flex-row gap-x-10 w-3/3 pt-5">
+                  <p className="w-2/6">Estado: </p>
+                  <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">
+                    {identifiedStudent.estado}
+                  </p>
                 </div>
+              </form>
+
+              <div className="flex flex-col gap-x-10 w-6/6 p-2 items-center ">
+                <button
+                  className="rounded-sm bg-[#003B74] p-1 pl-5 pr-5 mt-5 hover:bg-[#003274] text-white cursor-pointer"
+                  onClick={handleSubmit}
+                >
+                  Registrar visita
+                </button>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center gap-y-5 m-5">
-              Esperando datos...
-            </div>
+            <div>Este usuario no es un estudiante</div>
           )}
 
           <div className="rounded-sm h-1 bg-gray-400"></div>
