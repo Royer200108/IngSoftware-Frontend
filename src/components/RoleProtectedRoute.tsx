@@ -14,15 +14,20 @@ function RoleProtectedRoute({
 
   if (isLoading) return <div>Cargando...</div>;
 
-  if (!allowedRoles.includes(role!)) {
-    // Redirigir según el rol actual
-    if (role === 1) return <Navigate to="/reports" />;
-    if (role === 2) return <Navigate to="/" />;
-    //if (role !== 1 && role !== 2) return <Navigate to="/login" />;
-    return <Navigate to="/login" />;
+  // Si no hay rol (no autenticado), redirige a login
+  if (role === null) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Si el rol no está permitido, redirige según corresponda
+  if (!allowedRoles.includes(role)) {
+    return role === 1 ? (
+      <Navigate to="/reports" replace />
+    ) : (
+      <Navigate to="/" replace />
+    );
   }
 
   return children;
 }
-
 export default RoleProtectedRoute;
