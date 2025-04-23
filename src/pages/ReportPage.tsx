@@ -6,8 +6,9 @@ import IngresosPorDia from "../components/IngresosPorDia";
 import IngresosPorMetodo from "../components/IngresosPorMetodo";
 import IngresosPorCarrera from "../components/IngresosPorCarrera";
 import Dashboard from "../components/Dashboard";
-import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+
+import Arrow from "../assets/blue_arrow.png";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -32,7 +33,7 @@ interface IngresoCarrera {
 
 function ReportPage() {
   const navigate = useNavigate();
-  const { setUser, setRole } = useAuth(); // 👈
+
   const [selectedReport, setSelectedReport] = useState<ReportType>("dashboard");
   const [dataCentro, setDataCentro] = useState<IngresoCentro[]>([]);
   const [dataDia, setDataDia] = useState<IngresoDia[]>([]);
@@ -71,40 +72,27 @@ function ReportPage() {
       });
   }, []);
 
-  // Función para cerrar sesión
-  async function cerrarSesion() {
-    try {
-      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      });
-
-      if (!response.ok) {
-        throw new Error("Error al cerrar sesión en el servidor");
-      }
-
-      await response.json();
-      //console.log(data.message);
-    } catch (error) {
-      console.error("Error de cierre de sesión:", error);
-    }
-  }
-
-  // Manejar el logout y redirigir después de cerrar sesión
-  async function handleLogout() {
-    await cerrarSesion(); // Cerramos sesión en el servidor
-    setUser(null); // Limpiamos el contexto de usuario
-    setRole(null); // Limpiamos el contexto de rol
-    navigate("/login"); // Redirigimos a la página de inicio de sesión
-  }
-
   if (loading) return <div>Cargando...</div>;
   if (error) return <div>{error}</div>;
+
+  function handleRoute(url: string) {
+    //sessionStorage.removeItem("token");
+    navigate(url);
+  }
 
   return (
     <>
       <Header />
       <div className="p-4">
+        <div
+          className="flex flex-row items-center gap-x-10 w-3/3 pt-5 cursor-pointer mb-5"
+          onClick={() => handleRoute("/homepageadmin")}
+        >
+          <img src={Arrow} alt="" className="rotate-180" />
+          <div className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md">
+            Atrás
+          </div>
+        </div>
         <h2 className="text-xl font-bold mb-4">Reportes</h2>
 
         <div className="flex flex-wrap gap-2 mb-6">
@@ -167,16 +155,6 @@ function ReportPage() {
         {selectedReport === "carrera" && (
           <IngresosPorCarrera data={dataCarrera} />
         )}
-
-        {/* Botón de cerrar sesión */}
-        <div className="flex justify-center mt-8">
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded-md "
-            onClick={handleLogout}
-          >
-            Cerrar sesión
-          </button>
-        </div>
       </div>
       <Footer />
     </>

@@ -94,7 +94,7 @@ function Login() {
 
   useEffect(() => {
     if (user && role !== null) {
-      if (role === 1) navigate("/reports");
+      if (role === 1) navigate("/homepageadmin");
       else if (role === 2) navigate("/");
     }
   }, [user, role, navigate]);
@@ -152,20 +152,13 @@ function Login() {
                   required
                 />
               </div>
-              <div className="flex justify-end p-2 w-6/6">
-                <p
-                  className="hover:text-blue-700 cursor-pointer"
-                  onClick={() => navigate("/signup")}
-                >
-                  ¿No tienes un usuario?
-                </p>
-              </div>
+
               <button
                 type="submit"
                 className={
                   formData.correo && formData.password && !correoError
-                    ? `rounded-sm bg-[#003B74] p-1 pl-5 pr-5 hover:bg-[#003274] text-white cursor-pointer`
-                    : `rounded-sm bg-gray-400 p-1 pl-5 pr-5  text-white `
+                    ? `rounded-sm bg-[#003B74] p-1 pl-5 pr-5 mt-5 hover:bg-[#003274] text-white cursor-pointer`
+                    : `rounded-sm bg-gray-400 p-1 pl-5 pr-5 mt-5 text-white `
                 }
               >
                 Iniciar Sesión

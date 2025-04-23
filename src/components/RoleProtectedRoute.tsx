@@ -22,7 +22,7 @@ function RoleProtectedRoute({
   // Si el rol no está permitido, redirige según corresponda
   if (!allowedRoles.includes(role)) {
     return role === 1 ? (
-      <Navigate to="/reports" replace />
+      <Navigate to="/homepageadmin" replace />
     ) : (
       <Navigate to="/" replace />
     );

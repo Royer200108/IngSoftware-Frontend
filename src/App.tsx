@@ -24,6 +24,7 @@ import { AuthProvider } from "./context/AuthContext";
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "./context/AuthContext"; // 👈
+import HomePageAdmin from "./pages/HomePageAdmin";
 
 function App() {
   return (
@@ -45,7 +46,7 @@ function AppRouter() {
 
     // Solo redirige si estamos en login y el usuario está autenticado
     if (user && role !== null && location.pathname === "/login") {
-      navigate(role === 1 ? "/reports" : "/", { replace: true });
+      navigate(role === 1 ? "/homepageadmin" : "/", { replace: true });
     }
 
     // Si no hay usuario y no estamos en login, redirige a login
@@ -58,11 +59,9 @@ function AppRouter() {
 
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<SignUp />} />
-      <Route path="*" element={<NotFound />} />
-
       {/* Rutas públicas */}
+      <Route path="/login" element={<Login />} />
+      <Route path="*" element={<NotFound />} />
 
       {/* Ruta solo para usuarios normales (rol 2) */}
 
@@ -74,6 +73,7 @@ function AppRouter() {
           </RoleProtectedRoute>
         }
       />
+
       <Route
         path="/authemployeestudent"
         element={
@@ -150,10 +150,26 @@ function AppRouter() {
       />
       {/* Ruta solo para administradores (rol 1) */}
       <Route
+        path="/homepageadmin"
+        element={
+          <RoleProtectedRoute allowedRoles={[1]}>
+            <HomePageAdmin />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
         path="/reports"
         element={
           <RoleProtectedRoute allowedRoles={[1]}>
             <ReportPage />
+          </RoleProtectedRoute>
+        }
+      />
+      <Route
+        path="/signup"
+        element={
+          <RoleProtectedRoute allowedRoles={[1]}>
+            <SignUp />
           </RoleProtectedRoute>
         }
       />
