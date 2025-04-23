@@ -7,6 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState } from "react";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+console.log("API BASE URL:", API_BASE_URL);
 
 function IdentifyByEmployeeNumber() {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ function IdentifyByEmployeeNumber() {
   const verifyEmployeeNumber = async (employeeNumber: string) => {
     try {
       const response = await fetch(
-        `${API_BASE_URL}/persona/buscarPorEmpleado?numeroEmpleado=${employeeNumber}`,
+        `${API_BASE_URL}/persona/buscarPorNumeroEmpleado?numeroEmpleado=${employeeNumber}`,
         {
           method: "GET",
           headers: { "Content-Type": "application/json" },
