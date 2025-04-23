@@ -11,15 +11,19 @@ import Arrow from "../assets/blue_arrow.png";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function HomePageAdmin() {
+  //Estados para manejar el usuario y el rol
   const navigate = useNavigate();
   const { user, setUser, setRole } = useAuth();
+  // Estado para almacenar los datos del guardia
   const [guardia, setGuardia] = useState<{
     nombres: string;
     correo: string;
     nombre_rol: string;
   } | null>(null);
+  // Constante que contiene las páginas a las que se puede navegar
   const pages: string[] = ["/signup", "/reports"];
 
+  // Función para cerrar sesión
   async function cerrarSesion() {
     const response = await fetch(`${API_BASE_URL}/auth/logout`, {
       method: "POST",
@@ -29,7 +33,7 @@ function HomePageAdmin() {
     await response.json();
   }
 
-  // Manejar el logout y redirigir después de cerrar sesión
+  // Funcion para manejar el logout y redirigir después de cerrar sesión
   async function handleLogout() {
     try {
       await cerrarSesion();
@@ -44,6 +48,7 @@ function HomePageAdmin() {
     }
   }
 
+  //Funcion para obtener los datos del guardia desde la API
   async function obtenerDatosGuardia() {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/guardia`, {
@@ -67,6 +72,7 @@ function HomePageAdmin() {
     }
   }
 
+  // Efecto para obtener los datos del guardia al cargar el componente
   useEffect(() => {
     obtenerDatosGuardia();
   }, []); // ← solo se ejecuta una vez cuando se monta el componente

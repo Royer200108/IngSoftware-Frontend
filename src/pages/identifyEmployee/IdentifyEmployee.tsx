@@ -15,10 +15,11 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function IdentifyEmployee() {
   const navigate = useNavigate();
+  //Constante que obtiene el movito de visita desde la URL
   const motivo = useParams();
-  //console.log("El motivo de visita es: ", motivo.motivo_visita);
+  //Constante que obtiene le informacion del guardia autenticaod
   const { user } = useAuth();
-
+  //Estado que contiene la informacion de la persona identificada
   const [identifiedUser, setIdentifiedUser] = useState<{
     id_persona: string;
     dni: string;
@@ -29,16 +30,18 @@ function IdentifyEmployee() {
     motivos_visita: string;
     guardia_uuid: string;
   } | null>(null);
-
+  //Estado que contiene la informacion del empleado identificado
   const [identifiedEmployee, setIdentifiedEmployee] = useState<{
     numero_empleado: string;
     puesto: string;
     centro_regional: string;
   } | null>(null);
-
+  //Bandera que indica si el usuario ha sido identificado
   const [identified, setIdenfied] = useState(false);
+  //Bandera que indica si el modal de exito se debe mostrar
   const [showModal, setShowModal] = useState(false);
 
+  //Funcion que se ejecuta cuando se identifica un usuario y guarda sus datos
   const handleUserIdentified = async (usuario: {
     id_persona: string;
     dni: string;
@@ -63,26 +66,28 @@ function IdentifyEmployee() {
       guardia_uuid: user?.id || "",
     }));
 
-    //console.log("EL ID DE LA PERSONA A BUSCAR ES: ", usuario.id_persona);
-
-    const estudiante = await verificarEstudiante(usuario.id_persona);
-    if (estudiante) {
-      setIdentifiedEmployee(estudiante);
+    const empleado = await verificarEmpleado(usuario.id_persona);
+    if (empleado) {
+      setIdentifiedEmployee(empleado);
       //console.log("AQUI DEBERIA ESTAR LLENO ", estudiante);
     }
   };
 
+  //Funcion para navegar entre rutas
   function handleRoute(url: string) {
     navigate(url);
   }
-
-  async function verificarEstudiante(id_persona: string) {
+  //Funcion que verifica la existencia de ese empleado
+  async function verificarEmpleado(id_persona: string) {
     try {
-      const Response = await fetch(`${API_BASE_URL}/persona/verificarEmpleado`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id_persona }),
-      });
+      const Response = await fetch(
+        `${API_BASE_URL}/persona/verificarEmpleado`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id_persona }),
+        }
+      );
 
       if (!Response.ok) {
         throw new Error("Error en el registro");
@@ -98,20 +103,24 @@ function IdentifyEmployee() {
     }
   }
 
+  //Funcion que registra la visita del empleado
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     try {
-      const formResponse = await fetch(`${API_BASE_URL}/persona/registrarIngreso`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          id_persona: identifiedUser?.id_persona,
-          motivo_visita: identifiedUser?.motivos_visita,
-          metodo_ingreso: "Reconocimiento Facial",
-          uuid_usuario: identifiedUser?.guardia_uuid,
-        }),
-      });
+      const formResponse = await fetch(
+        `${API_BASE_URL}/persona/registrarIngreso`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            id_persona: identifiedUser?.id_persona,
+            motivo_visita: identifiedUser?.motivos_visita,
+            metodo_ingreso: "Reconocimiento Facial",
+            uuid_usuario: identifiedUser?.guardia_uuid,
+          }),
+        }
+      );
 
       if (!formResponse.ok) {
         throw new Error("Error en el registro");

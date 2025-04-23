@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function SignUp() {
+  // Estado que contiene los datos del usuario que se registrara
   const [formData, setFormData] = useState({
     identidad: "",
     nombre: "",
@@ -23,17 +24,21 @@ function SignUp() {
     descriptor_facial: [] as number[],
     foto: "",
   });
+  //Estado que maneja los errores de validación del correo
   const [emailError, setEmailError] = useState("");
+  //Estado que almacena los roles que puede tomar el usuario
   const [roles, setRoles] = useState<{ id_rol: number; nombre_rol: string }[]>(
     []
   );
+  //Estado que maneja los centros regionale
   const [centros, setCentros] = useState<
     { id_centro_regional: number; centro_regional: string }[]
   >([]);
+  //Estado que maneja las areas de los centros
   const [areas, setAreas] = useState<
     { id_area: number; nombre_area: string; ubicacion: string }[]
   >([]);
-
+  //Estado que almacena la foto capturada del usuairio
   const [capturedPhoto, setCapturedPhoto] = useState<{
     data: string;
     fileName: string;
@@ -63,9 +68,8 @@ function SignUp() {
     return formattedValue;
   };
 
+  //Funcion que captura la fotografia del usuario a registrar
   const handlePhotoCapture = (photoData: string) => {
-    //console.log("Foto recibida del hijo:", photoData);
-
     // Generar nombre de archivo basado en los datos del formulario
     const generateFileName = () => {
       const cleanId = formData.identidad.replace(/-/g, "");
@@ -88,11 +92,13 @@ function SignUp() {
     }));
   };
 
+  //Funcion que valida el formato del correo electronico
   function validateEmail(email: string) {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailPattern.test(email);
   }
 
+  //Funcion que maneja el cambio de los inputs del formulario
   function handleChange(
     event: ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -108,15 +114,15 @@ function SignUp() {
     if (name === "email") {
       setEmailError(validateEmail(value) ? "" : "Correo electrónico no válido");
     }
-
-    //console.log("FORMATEADO:", formData);
   }
 
+  //Funcion para navegar entre las diferentes rutas de la aplicacion
   function handleRoute(url: string) {
     //sessionStorage.removeItem("token");
     navigate(url);
   }
 
+  //Funcion que obtiene los roles de los usuarios desde la API
   async function obtenerRoles() {
     try {
       const responseRoles = await fetch(`${API_BASE_URL}/auth/roles`, {
@@ -135,13 +141,14 @@ function SignUp() {
       }
 
       const data = await responseRoles.json();
-      //console.log("Los roles recibidos:", data);
+
       return data;
     } catch (error) {
       console.error("Error en la petición:", error);
     }
   }
 
+  //Funcion que obtiene los centros regionales desde la API
   async function obtenerCentros() {
     try {
       const responseRoles = await fetch(`${API_BASE_URL}/auth/centros`, {
@@ -167,6 +174,7 @@ function SignUp() {
     }
   }
 
+  //Funcion que obtiene las areas disponibles en los centros regionales desde la API
   async function obtenerAreas(nombre_centro: string) {
     try {
       const responseRoles = await fetch(`${API_BASE_URL}/auth/areas`, {
@@ -194,6 +202,8 @@ function SignUp() {
     }
   }
 
+  //Efecto que se ejecuta apenas se carga la pagina
+  //Obtiene los roles, centros
   useEffect(() => {
     const initialize = async () => {
       const roles = await obtenerRoles();
@@ -208,11 +218,11 @@ function SignUp() {
     initialize();
   }, []);
 
+  //Funcion que crea al nuevo usuario usando la API
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     setFormData;
-    //console.log("La data enviada es: ", formData);
     try {
       const base64ToBlob = async (base64: string) => {
         const response = await fetch(base64);
@@ -245,7 +255,7 @@ function SignUp() {
       //console.log("URL de la imagen:", finalPhotoResponse.imageUrl);
 
       formData.foto = finalPhotoResponse.imageUrl;
-      
+
       const response = await fetch(`${API_BASE_URL}/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -256,7 +266,6 @@ function SignUp() {
         throw new Error("Error en el registro");
       }
 
-      //console.log("Usuario registrado exitosamente");
       navigate("/login", { replace: true });
     } catch (error) {
       console.error("Error de autenticación:", error);

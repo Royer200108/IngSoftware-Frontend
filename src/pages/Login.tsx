@@ -21,6 +21,7 @@ function Login() {
   const [showModal, setShowModal] = useState(false);
   const [correoError, setcorreoError] = useState("");
 
+  //Funcion para manejar el cambio de los inputs y validar el correo
   function handleChange(
     event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) {
@@ -38,7 +39,7 @@ function Login() {
     }
   }
 
-  // Función para cerrar el modal
+  // Función para cerrar el modal que se muestra en caso de haber error de inicio de sesion
   const closeModal = () => {
     setShowModal(false);
     setError(null);
@@ -49,6 +50,7 @@ function Login() {
     });
   };
 
+  //Funcion para manejar el submit del formulario y hacer la peticion a la API
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null); // Resetear el error al intentar nuevamente
@@ -95,6 +97,7 @@ function Login() {
     }
   }
 
+  // Función para redirigir al usuario según su rol
   useEffect(() => {
     if (user && role !== null) {
       if (role === 1) navigate("/homepageadmin");
@@ -111,12 +114,11 @@ function Login() {
     const correoPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return correoPattern.test(correo);
   }
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
       <main className="flex-grow p-4 content-center items-center w-3/5 mx-auto">
-        {/* Modal de Error */}
-
         <div className="rounded-sm h-1 bg-gray-400"></div>
         <div className=" flex flex-col gap-y-7 items-center pt-10">
           <p className="text-3xl pt-5">Ingresa tu correo y contraseña</p>
@@ -173,7 +175,7 @@ function Login() {
         <div className="rounded-sm h-1 bg-gray-400"></div>
       </main>
       <Footer />
-
+      {/*Modal del error */}
       {showModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/70 z-50">
           <div className="bg-white rounded-sm shadow-lg p-6 opacity-100 text-center">

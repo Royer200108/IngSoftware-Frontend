@@ -11,20 +11,19 @@ import Arrow from "../assets/blue_arrow.png";
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function HomePage() {
+  //Estados para manejar el usuario y el rol
   const navigate = useNavigate();
   const { user, setUser, setRole } = useAuth();
+  //Estado para manejar los datos del guardia
   const [guardia, setGuardia] = useState<{
     nombres: string;
     correo: string;
     nombre_rol: string;
   } | null>(null);
-  const pages: string[] = [
-    "/authemployeestudent",
-    "/authvisitor",
-    "/reports",
-    "/registervisitor",
-  ];
+  // Contante para manejar las rutas disponibles
+  const pages: string[] = ["/authemployeestudent", "/authvisitor"];
 
+  //Funcion para cerrar sesion del usuario
   async function cerrarSesion() {
     const response = await fetch(`${API_BASE_URL}/auth/logout`, {
       method: "POST",
@@ -34,7 +33,7 @@ function HomePage() {
     await response.json();
   }
 
-  // Manejar el logout y redirigir después de cerrar sesión
+  // Funcion que activa el cierre de sesion al hacer click sobre la opcion correspondiente
   async function handleLogout() {
     try {
       await cerrarSesion();
@@ -49,6 +48,7 @@ function HomePage() {
     }
   }
 
+  //Funcion que obtiene la informacion del guardia autenticado a la API
   async function obtenerDatosGuardia() {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/guardia`, {
@@ -72,11 +72,12 @@ function HomePage() {
     }
   }
 
+  //Funcion que obtiene los datos del guardia tan pronto de entra a la pagina
   useEffect(() => {
     obtenerDatosGuardia();
   }, []); // ← solo se ejecuta una vez cuando se monta el componente
 
-  // Navegar a otras páginas
+  // Funcion para navegar a otras páginas
   function handleChange(index: number) {
     navigate(pages[index]);
   }

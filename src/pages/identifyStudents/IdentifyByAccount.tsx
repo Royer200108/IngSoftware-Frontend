@@ -13,9 +13,11 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function IdentifyByAccount() {
   const navigate = useNavigate();
+  //Constante que almacena el motivo de visita desde la URL
   const motivo = useParams();
+  //Constante que contiene los datos del guardia
   const { user } = useAuth();
-
+  //Estado que contiene los datos del usuario identificado
   const [identifiedUser, setIdentifiedUser] = useState<{
     id_persona: string;
     dni: string;
@@ -24,7 +26,7 @@ function IdentifyByAccount() {
     fotografia: string;
     motivos_visita: string;
   } | null>(null);
-
+  //Estado que contiene los datos del estudiante identificado
   const [identifiedStudent, setIdentifiedStudent] = useState<{
     nombres: string;
     apellidos: string;
@@ -35,14 +37,17 @@ function IdentifyByAccount() {
     id_persona: string;
     estado: string;
   } | null>(null);
-
+  //Estado que controla visibilidad de la modal de exito
   const [showModal, setShowModal] = useState(false);
+  //Estado que contiene el numero de cuenta del usuario identificado
   const [accountNumber, setAccountNumber] = useState("");
 
+  //Funcion para moverse entre rutas
   const handleRoute = (url: string) => {
     navigate(url);
   };
 
+  //Funcion que se ejecuta al enviar el formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -73,6 +78,7 @@ function IdentifyByAccount() {
     }
   };
 
+  //Funcion que verifica el numero de cuenta del estudiante
   const verifyAccountNumber = async (accountNumber: string) => {
     try {
       const response = await fetch(
@@ -89,7 +95,7 @@ function IdentifyByAccount() {
       }
 
       const data = await response.json();
-      
+
       if (data[0]) {
         const studentData = data[0];
 
@@ -157,12 +163,12 @@ function IdentifyByAccount() {
           {identifiedStudent && identifiedUser ? (
             <div className=" w-6/6">
               <div className="flex flex-row justify-center pt-5">
-                  <img
-                    src={identifiedStudent.fotografia}
-                    alt="Foto del estudiante"
-                    className="rounded-2xl w-3/5"
-                  />
-                </div>
+                <img
+                  src={identifiedStudent.fotografia}
+                  alt="Foto del estudiante"
+                  className="rounded-2xl w-3/5"
+                />
+              </div>
               <div className="flex flex-row gap-x-10 w-3/3 pt-5">
                 <p className="w-2/6">Usuario: </p>
                 <p className="w-4/6 bg-gray-300 rounded-sm border-gray-300 border-2 pl-2 pr-2 text-gray-700">

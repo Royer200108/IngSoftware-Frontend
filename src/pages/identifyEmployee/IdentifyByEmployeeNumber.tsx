@@ -11,9 +11,12 @@ console.log("API BASE URL:", API_BASE_URL);
 
 function IdentifyByEmployeeNumber() {
   const navigate = useNavigate();
+  //Constante que contiene la informacion del guardia
   const { user } = useAuth();
+  //Constante que contiene la informacion del motivo de la visita desde la URL
   const motivo = useParams();
 
+  //Estado que contiene la informacion del empleado identificado
   const [identifiedEmployee, setIdentifiedEmployee] = useState<{
     id_persona: string;
     numero_empleado: string;
@@ -23,14 +26,17 @@ function IdentifyByEmployeeNumber() {
     puesto: string;
     centro_regional: string;
   } | null>(null);
-
+  //bandera que controla la visibilidad del modal de exito
   const [showModal, setShowModal] = useState(false);
+  //Estado que contiene el numero del empleado
   const [employeeNumber, setEmployeeNumber] = useState("");
 
+  //Funcion para navegar entre rutas
   const handleRoute = (url: string) => {
     navigate(url);
   };
 
+  //Funcion que se ejecuta al enviar el formulario
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -61,6 +67,7 @@ function IdentifyByEmployeeNumber() {
     }
   };
 
+  //Funcion que verifica la existencia del empleado por su numero
   const verifyEmployeeNumber = async (employeeNumber: string) => {
     try {
       const response = await fetch(
@@ -77,7 +84,7 @@ function IdentifyByEmployeeNumber() {
       }
 
       const data = await response.json();
-      
+
       if (data[0]) {
         const employeeData = data[0];
 
@@ -136,11 +143,11 @@ function IdentifyByEmployeeNumber() {
           {identifiedEmployee ? (
             <div className=" w-6/6">
               <div className="flex flex-row justify-center pt-5">
-                  <img
-                    src={identifiedEmployee.fotografia}
-                    alt="Foto del empleado"
-                    className="rounded-2xl w-3/5"
-                  />
+                <img
+                  src={identifiedEmployee.fotografia}
+                  alt="Foto del empleado"
+                  className="rounded-2xl w-3/5"
+                />
               </div>
               <div className="flex flex-row gap-x-10 w-3/3 pt-5">
                 <p className="w-2/6">Empleado: </p>

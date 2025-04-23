@@ -11,10 +11,10 @@ import FaceDescriptorExtractor from "../../components/FaceDescriptorExtractor";
 
 import Arrow from "../../assets/blue_arrow.png";
 
-
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function RegisterVisitor() {
   const navigate = useNavigate();
+  //Estado que almacena la informaicon del visitante que sera registrado
   const [formData, setFormData] = useState({
     nombres: "",
     apellidos: "",
@@ -23,20 +23,23 @@ function RegisterVisitor() {
     dni: "",
     descriptor_facial: [] as number[],
   });
+  //Estado que maneja los errores del correo
   const [correoError, setcorreoError] = useState("");
+  //Estado que maneja la foto capturada
   const [capturedPhoto, setCapturedPhoto] = useState<{
     data: string;
     fileName: string;
   } | null>(null);
+  //Bandera para saber si ya se tomo la foto al usuairo que se registrara
   const [clicked, setClicked] = useState(false);
 
+  //Funcion para saber si ya se tomo la fotografia al usuario que se registrara
   const handleClick = () => {
     setClicked(true);
   };
 
+  // Funcion que se ejecuta cuando se toma la foto al usuario
   const handlePhotoCapture = (photoData: string) => {
-    //console.log("Foto recibida del hijo:", photoData);
-
     // Generar nombre de archivo basado en los datos del formulario
     const generateFileName = () => {
       const cleanId = formData.dni.replace(/-/g, "");
@@ -105,11 +108,9 @@ function RegisterVisitor() {
         validatecorreo(value) ? "" : "Correo electrónico no válido"
       );
     }
-
-    //console.log("FORMATEADO:", formData);
   }
 
-  //Envia la información obtenida
+  //Envia la información del usuario para registrarlo en la BD
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
@@ -126,7 +127,7 @@ function RegisterVisitor() {
         formDataImage.append("file", blob, capturedPhoto.fileName);
       }
 
-      // Agregar los demás datos dael formulario
+      // Agregar los demás datos del formulario
       Object.entries(formData).forEach(([key, value]) => {
         if (key !== "foto") {
           formDataImage.append(
@@ -142,31 +143,26 @@ function RegisterVisitor() {
       });
 
       const finalPhotoResponse = await photoResponse.json();
-      //console.log("URL de la imagen:", finalPhotoResponse.imageUrl);
 
       formData.foto = finalPhotoResponse.imageUrl;
 
-      //console.log(formData);
-      const formResponse = await fetch(
-        `${API_BASE_URL}/persona/registrar`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        }
-      );
+      const formResponse = await fetch(`${API_BASE_URL}/persona/registrar`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
 
       if (!photoResponse.ok && !formResponse.ok) {
         throw new Error("Error en el registro");
       }
 
-      //console.log("Usuario registrado exitosamente");
       navigate("/identifyvisitor");
     } catch (error) {
       console.error("Error de autenticación:", error);
     }
   }
 
+  //Funcion para navegar entre las diferentes vistas
   function handleRoute(url: string) {
     //sessionStorage.removeItem("token");
     navigate(url);

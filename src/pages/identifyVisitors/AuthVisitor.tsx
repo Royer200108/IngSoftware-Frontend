@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import Arrow from "../../assets/blue_arrow.png";
 
-//function HomePage({ token }: Props) {
+//PAGINA MERAMENTE DE NAVEGACION
 function AuthVisitor() {
   const navigate = useNavigate();
 

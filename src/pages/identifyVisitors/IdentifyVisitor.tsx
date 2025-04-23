@@ -11,23 +11,16 @@ import { useParams } from "react-router-dom";
 
 import Arrow from "../../assets/blue_arrow.png";
 
-
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-/*
-interface Props {
-  userState: {
-    id: string;
-    email: string;
-  };
-}
-*/
-//function HomePage({ token }: Props) {
+
 function IdentifyVisitor() {
   const navigate = useNavigate();
+  //Contante que obtiene el motivo de visita desde la URL
   const motivo = useParams();
-  //console.log("El motivo de visita es: ", motivo.motivo_visita);
+  //Constante que obtiene la informacion del guardia que se encuentra logueado
   const { user } = useAuth();
 
+  //Estado que almacena la informacion del usuario identificado
   const [identifiedUser, setIdentifiedUser] = useState<{
     id_persona: string;
     dni: string;
@@ -38,12 +31,16 @@ function IdentifyVisitor() {
     motivos_visita: string;
     guardia_uuid: string;
   } | null>(null);
+  //Estado que almacena los motivos de visita
   const [visitReasons, setVisitReasons] = useState<
     { id_motivo_visita: number; descripcion: string }[]
   >([]);
+  //booleano que indica si el usuario ha sido identificado
   const [identified, setIdenfied] = useState(false);
+  //Estado que controla la visibilidad del modal de éxito
   const [showModal, setShowModal] = useState(false);
 
+  //Funcion que se ejecuta cuando el usuario es identificado
   const handleUserIdentified = (usuario: {
     id_persona: string;
     dni: string;
@@ -55,7 +52,6 @@ function IdentifyVisitor() {
     guardia_uuid: string;
   }) => {
     setIdentifiedUser(usuario);
-    //console.log("Usuario identificado:", usuario);
     setIdenfied(true);
 
     setIdentifiedUser((prevIdentifiedUser) => ({
@@ -70,11 +66,13 @@ function IdentifyVisitor() {
     }));
   };
 
+  //Funcion para navegar entre las rutas
   function handleRoute(url: string) {
     //sessionStorage.removeItem("token");
     navigate(url);
   }
 
+  //Funcion que obtiene los motivos de visita desde la API
   async function obtenerMotivos() {
     try {
       const responseMotivosVisita = await fetch(
@@ -96,17 +94,17 @@ function IdentifyVisitor() {
       }
 
       const data = await responseMotivosVisita.json();
-      //console.log("Los motivos recibidos:", data);
+
       return data;
     } catch (error) {
-      //console.error("Error en la petición:", error);
+      console.error("Error en la petición:", error);
     }
   }
 
+  //Efecto que obtiene los motivos de visita al cargar el componente
   useEffect(() => {
     const initialize = async () => {
       const data = await obtenerMotivos();
-      //console.log("Los motivos de visita: ", data);
       if (data) {
         setVisitReasons(data);
       }
@@ -115,6 +113,8 @@ function IdentifyVisitor() {
     initialize();
   }, []);
 
+  //Funcion que maneja el cambio de los inputs
+  //Esta funcion se encarga de actualizar el estado del usuario identificado
   function handleChange(
     event: ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -133,10 +133,9 @@ function IdentifyVisitor() {
       guardia_uuid: prevIdentifiedUser?.guardia_uuid || "",
       [name]: value,
     }));
-    //console.log("La informacion del usuario: ", identifiedUser);
   }
 
-  //Envia la información obtenida
+  //Funcion que registra la visita del usuario
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 

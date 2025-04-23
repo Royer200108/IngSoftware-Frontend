@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 import Arrow from "../../assets/blue_arrow.png";
 
-//function HomePage({ token }: Props) {
+//PAGINA MERAMENTE DE NAVEGACION, NO HAY FORMULARIO
 function AuthEmployee() {
   const navigate = useNavigate();
 
@@ -54,7 +54,9 @@ function AuthEmployee() {
                   <img src={Arrow} alt="" />
                   <div
                     className="w-100 text-2xl hover:text-blue-700 bg-blue-300 pl-2 pr-2 rounded-md"
-                    onClick={() => handleRoute(`/IdentifyByEmployeeNumber/Trabajo`)}
+                    onClick={() =>
+                      handleRoute(`/IdentifyByEmployeeNumber/Trabajo`)
+                    }
                   >
                     Numero de Empleado
                   </div>

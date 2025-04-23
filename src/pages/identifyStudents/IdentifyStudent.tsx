@@ -12,21 +12,14 @@ import { useParams } from "react-router-dom";
 import Arrow from "../../assets/blue_arrow.png";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-/*
-interface Props {
-  userState: {
-    id: string;
-    email: string;
-  };
-}
-*/
-//function HomePage({ token }: Props) {
+
 function IdentifyStudent() {
   const navigate = useNavigate();
+  //Constante que extrae el motivo de visita desde la URL
   const motivo = useParams();
-  //console.log("El motivo de visita es: ", motivo.motivo_visita);
+  //Constante que contiene la informacion del guardia registrado
   const { user } = useAuth();
-
+  //Estado que contiene la informacion del usuario identificado
   const [identifiedUser, setIdentifiedUser] = useState<{
     id_persona: string;
     dni: string;
@@ -37,6 +30,7 @@ function IdentifyStudent() {
     motivos_visita: string;
     guardia_uuid: string;
   } | null>(null);
+  //Estado que contiene la informacion del estudiante identificado
   const [identifiedStudent, setIdentifiedStudent] = useState<{
     numero_cuenta: string;
     nombre_carrera: string;
@@ -44,9 +38,12 @@ function IdentifyStudent() {
     estado: string;
   } | null>(null);
 
+  //Estado que controla si el usuario ha sido identificado
   const [identified, setIdenfied] = useState(false);
+  //Estado que controla si se muestra el modal de éxito
   const [showModal, setShowModal] = useState(false);
 
+  //Funcion que se ejecuta cuando se identifica a un usuario
   const handleUserIdentified = async (usuario: {
     id_persona: string;
     dni: string;
@@ -71,12 +68,9 @@ function IdentifyStudent() {
       guardia_uuid: user?.id || "",
     }));
 
-    //console.log("EL ID DE LA PERSONA A BUSCAR ES: ", usuario.id_persona);
-
     const estudiante = await verificarEstudiante(usuario.id_persona);
     if (estudiante) {
-      setIdentifiedStudent(estudiante); // ya que estás retornando `data` completo
-      //console.log("AQUI DEBERIA ESTAR LLENO ", estudiante);
+      setIdentifiedStudent(estudiante);
     }
   };
 
@@ -101,16 +95,14 @@ function IdentifyStudent() {
         throw new Error("Error en el registro");
       }
       const data = await Response.json();
-      //console.log("LA DATA OBTENIDA DEL ESTUDIANTE ", data[0]);
       setIdentifiedStudent(data[0]);
-      //console.log("contenido de identifiedStudent: ", identifiedStudent);
       return data[0];
     } catch (error) {
       console.error("Error de autenticación:", error);
     }
   }
 
-  //Envia la información obtenida
+  //Envia la información obtenida del usuario identificado al backend
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
