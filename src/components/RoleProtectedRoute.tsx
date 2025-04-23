@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 
 type RoleProtectedRouteProps = {
   children: JSX.Element;
-  allowedRoles: number[]; // Ej: [1] para admin, [2] para user
+  allowedRoles: number[]; // [1] para admin, [2] para user
 };
 
 function RoleProtectedRoute({

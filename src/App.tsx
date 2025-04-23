@@ -23,7 +23,7 @@ import { AuthProvider } from "./context/AuthContext";
 
 import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { useAuth } from "./context/AuthContext"; // 👈
+import { useAuth } from "./context/AuthContext";
 import HomePageAdmin from "./pages/HomePageAdmin";
 
 function App() {
@@ -37,10 +37,13 @@ function App() {
 export default App;
 
 function AppRouter() {
-  const { user, role, isLoading } = useAuth(); // 👈
+  //Variables para verificar la autenticacion
+  const { user, role, isLoading } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Funcion para verificar si el usuario tiene un rol permitido (Se ejecuta al entrar a esta pantalla)
+  // Si el usuario está autenticado y tiene un rol, redirige a la página correspondiente
   useEffect(() => {
     if (isLoading) return;
 
@@ -55,6 +58,7 @@ function AppRouter() {
     }
   }, [user, role, isLoading, location.pathname, navigate]);
 
+  // Si la autenticacion esta cargando, muestra un mensaje de carga
   if (isLoading) return <div>Cargando...</div>;
 
   return (
@@ -64,7 +68,6 @@ function AppRouter() {
       <Route path="*" element={<NotFound />} />
 
       {/* Ruta solo para usuarios normales (rol 2) */}
-
       <Route
         path="/"
         element={
@@ -73,7 +76,6 @@ function AppRouter() {
           </RoleProtectedRoute>
         }
       />
-
       <Route
         path="/authemployeestudent"
         element={
@@ -82,16 +84,16 @@ function AppRouter() {
           </RoleProtectedRoute>
         }
       />
-      {
-        <Route
-          path="/identifyvisitor/:motivo_visita"
-          element={
-            <RoleProtectedRoute allowedRoles={[2]}>
-              <IdentifyVisitor />
-            </RoleProtectedRoute>
-          }
-        />
-      }
+
+      <Route
+        path="/identifyvisitor/:motivo_visita"
+        element={
+          <RoleProtectedRoute allowedRoles={[2]}>
+            <IdentifyVisitor />
+          </RoleProtectedRoute>
+        }
+      />
+
       <Route
         path="/authvisitor"
         element={

@@ -9,11 +9,14 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function Login() {
   const navigate = useNavigate();
+  // Estados para verificar el rol y el usuario
   const { setUser, setRole, user, role } = useAuth();
+  // Estado para manejar el formulario
   const [formData, setFormData] = useState({
     correo: "",
     password: "",
   });
+  // Estados para el manejo de errores en el inicio de sesion
   const [error, setError] = useState<string | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [correoError, setcorreoError] = useState("");
